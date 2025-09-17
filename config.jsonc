@@ -44,8 +44,8 @@
     "on-click": "$TERMINAL -e btop"
   },
   "clock": {
-    "format": "{:L%A %H:%M}",
-    "format-alt": "{:L%d %B %Y}",
+    "format": "{:L%I:%M %p}",
+    "format-alt": "{:L%A %d %B %Y}",
     "tooltip": false,
     "on-click-right": "omarchy-cmd-tzupdate"
   },
