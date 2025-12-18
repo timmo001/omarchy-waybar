@@ -36,13 +36,14 @@
     "on-click": "omarchy-launch-floating-terminal-with-presentation omarchy-update",
     "tooltip-format": "Omarchy update available",
     "signal": 7,
-    "interval": 3600
+    "interval": 21600
   },
 
   "cpu": {
     "interval": 5,
     "format": "󰍛",
-    "on-click": "omarchy-launch-or-focus-tui btop"
+    "on-click": "omarchy-launch-or-focus-tui btop",
+    "on-click-right": "alacritty"
   },
   "clock": {
     "format": "{:L%I:%M %p}",
@@ -85,7 +86,6 @@
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
-    "format-off": "󰂲",
     "format-connected": "󰂱",
     "format-no-controller": "",
     "tooltip-format": "Devices connected: {num_connections}",
@@ -111,7 +111,7 @@
     "modules": ["custom/expand-icon", "tray"]
   },
   "custom/expand-icon": {
-    "format": " ",
+    "format": "",
     "tooltip": false
   },
   "custom/screenrecording-indicator": {
@@ -122,6 +122,6 @@
   },
   "tray": {
     "icon-size": 12,
-    "spacing": 12
+    "spacing": 17
   }
 }
