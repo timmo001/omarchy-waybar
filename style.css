@@ -3,11 +3,12 @@
 * {
   background-color: @background;
   color: @foreground;
+
   border: none;
   border-radius: 0;
   min-height: 0;
-  font-size: 14px;
   font-family: 'JetBrainsMono Nerd Font';
+  font-size: 12px;
 }
 
 .modules-left {
@@ -65,7 +66,7 @@ tooltip {
 }
 
 #clock {
-  margin-left: 5px;
+  margin-left: 8.75px;
 }
 
 .hidden {
