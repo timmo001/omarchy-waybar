@@ -32,6 +32,7 @@
 }
 
 #cpu,
+#memory,
 #battery,
 #pulseaudio,
 #custom-omarchy,
@@ -99,4 +100,38 @@ tooltip {
 
 #custom-voxtype.recording {
   color: #a55555;
+}
+
+#custom-camera {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#custom-camera.in-use {
+  color: #a55555;
+}
+
+#custom-microphone {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#custom-microphone.in-use {
+  color: #a55555;
+}
+
+#memory.warning {
+  color: #e5c07b;
+}
+
+#memory.critical {
+  color: #e06c75;
+}
+
+#cpu.warning {
+  color: #e5c07b;
+}
+
+#cpu.critical {
+  color: #e06c75;
 }
