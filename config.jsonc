@@ -47,7 +47,7 @@
     "interval": 21600
   },
   "cpu": {
-    "interval": 5,
+    "interval": 10,
     "format": "󰍛",
     "tooltip-format": "{usage}% usage",
     "on-click": "omarchy-launch-or-focus-tui btop",
@@ -57,7 +57,7 @@
     }
   },
   "memory": {
-    "interval": 10,
+    "interval": 15,
     "format": "󰘚",
     "tooltip-format": "{used:0.1f} / {total:0.1f} GiB ({percentage}%)\n{avail:0.1f} GiB free",
     "on-click": "omarchy-launch-or-focus-tui btop",
