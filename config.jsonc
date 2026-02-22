@@ -50,7 +50,7 @@
   "memory": {
     "interval": 10,
     "format": "󰘚",
-    "tooltip-format": "{avail:0.1f} GiB free",
+    "tooltip-format": "{used:0.1f} / {total:0.1f} GiB ({percentage}%)\n{avail:0.1f} GiB free",
     "on-click": "omarchy-launch-or-focus-tui btop",
     "states": {
       "warning": 70,
