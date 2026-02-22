@@ -51,7 +51,6 @@
     "format": "󰍛",
     "tooltip-format": "{usage}% usage",
     "on-click": "omarchy-launch-or-focus-tui btop",
-    "on-click-right": "alacritty",
     "states": {
       "warning": 70,
       "critical": 90
