@@ -101,3 +101,12 @@ tooltip {
 #custom-camera.in-use {
   color: #a55555;
 }
+
+#custom-microphone {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+#custom-microphone.in-use {
+  color: #a55555;
+}
