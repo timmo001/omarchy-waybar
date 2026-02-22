@@ -12,6 +12,7 @@
     "network",
     "pulseaudio",
     "cpu",
+    "memory",
     "battery"
   ],
   "hyprland/workspaces": {
@@ -40,6 +41,16 @@
     "format": "󰍛",
     "on-click": "omarchy-launch-or-focus-tui btop",
     "on-click-right": "alacritty"
+  },
+  "memory": {
+    "interval": 10,
+    "format": "󰘚",
+    "tooltip-format": "{avail:0.1f} GiB free",
+    "on-click": "omarchy-launch-or-focus-tui btop",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
   },
   "clock": {
     "format": "{:L%a %d %H:%M}",

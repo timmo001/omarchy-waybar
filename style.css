@@ -32,6 +32,7 @@
 }
 
 #cpu,
+#memory,
 #battery,
 #pulseaudio,
 #custom-omarchy,
@@ -109,4 +110,12 @@ tooltip {
 
 #custom-microphone.in-use {
   color: #a55555;
+}
+
+#memory.warning {
+  color: #e5c07b;
+}
+
+#memory.critical {
+  color: #e06c75;
 }
