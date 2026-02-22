@@ -150,14 +150,14 @@
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",
     "return-type": "json",
-    "interval": 5,
+    "interval": 30,
     "format": "{}",
     "tooltip": true
   },
   "custom/microphone": {
     "exec": "~/.config/waybar/scripts/microphone-usage.sh",
     "return-type": "json",
-    "interval": 5,
+    "interval": 20,
     "format": "{}",
     "tooltip": true
   },
