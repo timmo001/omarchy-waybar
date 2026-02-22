@@ -12,7 +12,8 @@
     "network",
     "pulseaudio",
     "cpu",
-    "battery"
+    "battery",
+    "custom/camera"
   ],
   "hyprland/workspaces": {
     "on-click": "activate",
@@ -122,6 +123,13 @@
     "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
     "signal": 8,
     "return-type": "json"
+  },
+  "custom/camera": {
+    "exec": "~/.config/waybar/scripts/camera-usage.sh",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{}",
+    "tooltip": true
   },
   "custom/voxtype": {
     "exec": "omarchy-voxtype-status",
