@@ -119,3 +119,11 @@ tooltip {
 #memory.critical {
   color: #e06c75;
 }
+
+#cpu.warning {
+  color: #e5c07b;
+}
+
+#cpu.critical {
+  color: #e06c75;
+}
