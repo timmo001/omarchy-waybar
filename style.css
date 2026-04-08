@@ -63,10 +63,7 @@ tooltip {
   padding: 2px;
 }
 
-#custom-update {
-  font-size: 10px;
-}
-
+#custom-update,
 #custom-dot-diff {
   font-size: 10px;
 }
