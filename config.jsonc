@@ -41,7 +41,7 @@
   "custom/dot-diff": {
     "exec": "~/.config/waybar/scripts/dot-diff-waybar.sh",
     "return-type": "json",
-    "interval": 45,
+    "interval": 60,
     "format": "{}",
     "on-click": "~/.config/waybar/scripts/dot-diff-terminal.sh",
     "tooltip": true
