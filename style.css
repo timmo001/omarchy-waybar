@@ -36,6 +36,7 @@
 #battery,
 #pulseaudio,
 #custom-omarchy,
+#custom-sync,
 #custom-update,
 #custom-dot-diff {
   min-width: 12px;
@@ -72,6 +73,12 @@ tooltip {
 
 #custom-dot-diff.dots-attention {
   color: #e5c07b;
+}
+
+#custom-dot-diff.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
 }
 
 #clock {
