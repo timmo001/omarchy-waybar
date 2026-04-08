@@ -37,6 +37,7 @@
 #pulseaudio,
 #custom-omarchy,
 #custom-sync,
+#custom-dot-diff,
 
 #custom-update {
   min-width: 12px;
@@ -63,13 +64,8 @@ tooltip {
   padding: 2px;
 }
 
-#custom-update {
-  font-size: 10px;
-}
-
+#custom-update,
 #custom-dot-diff {
-  min-width: 12px;
-  margin: 0 6px 0 0;
   font-size: 10px;
 }
 
