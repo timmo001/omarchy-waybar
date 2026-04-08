@@ -8,6 +8,7 @@
   "modules-center": ["hyprland/workspaces"],
   "modules-right": [
     "custom/update",
+    "custom/dot-diff",
     "custom/voxtype",
     "group/tray-expander",
     "custom/camera",
@@ -43,6 +44,14 @@
     "tooltip-format": "Omarchy update available",
     "signal": 7,
     "interval": 21600,
+  },
+  "custom/dot-diff": {
+    "exec": "~/.config/waybar-laptop/scripts/dot-diff-waybar.sh",
+    "return-type": "json",
+    "interval": 45,
+    "format": "{}",
+    "on-click": "~/.config/waybar-laptop/scripts/dot-diff-terminal.sh",
+    "tooltip": true,
   },
   "cpu": {
     "interval": 5,
