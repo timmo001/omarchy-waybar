@@ -66,6 +66,16 @@ tooltip {
   font-size: 10px;
 }
 
+#custom-dot-diff {
+  min-width: 12px;
+  margin: 0 6px 0 0;
+  font-size: 10px;
+}
+
+#custom-dot-diff.dots-attention {
+  color: #e5c07b;
+}
+
 #clock {
   margin-left: 8.75px;
 }
