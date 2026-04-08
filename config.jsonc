@@ -46,11 +46,11 @@
     "interval": 21600,
   },
   "custom/dot-diff": {
-    "exec": "~/.config/waybar-laptop/scripts/dot-diff-waybar.sh",
+    "exec": "~/.config/waybar/scripts/dot-diff-waybar.sh",
     "return-type": "json",
     "interval": 60,
     "format": "{}",
-    "on-click": "~/.config/waybar-laptop/scripts/dot-diff-terminal.sh",
+    "on-click": "~/.config/waybar/scripts/dot-diff-terminal.sh",
     "tooltip": true,
   },
   "cpu": {
