@@ -52,8 +52,8 @@
     "return-type": "json",
     "interval": 60,
     "format": "{}",
-    "on-click": "~/.config/waybar/scripts/dot-diff-tmux.sh",
-    "on-click-right": "~/.config/waybar/scripts/dot-diff-tmux-all.sh",
+    "on-click": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session changed",
+    "on-click-right": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session all",
     "tooltip": true,
   },
   "custom/twitch-notifications-active": {
