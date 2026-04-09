@@ -9,6 +9,7 @@
     "custom/update",
     "custom/voxtype",
     "custom/screenrecording-indicator",
+    "custom/in-a-call",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
@@ -167,6 +168,14 @@
     "exec": "$OMARCHY_PATH/default/waybar/indicators/screen-recording.sh",
     "signal": 8,
     "return-type": "json",
+  },
+  "custom/in-a-call": {
+    "exec": "go-automate ha watch entity --waybar --icon 󰃚 --tooltip-on 'In a call' --tooltip-off 'Not in a call' --class-on active --class-off inactive --hide-off input_boolean.in_a_call",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "restart-interval": 5,
+    "on-click": "timmo-run-command go-automate ha ib t in_a_call",
   },
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",

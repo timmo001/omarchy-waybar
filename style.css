@@ -38,6 +38,7 @@
 #custom-omarchy,
 #custom-sync,
 #custom-screenrecording-indicator,
+#custom-in-a-call,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -51,6 +52,7 @@
 }
 
 #custom-screenrecording-indicator,
+#custom-in-a-call,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -120,6 +122,21 @@ tooltip {
 
 #custom-screenrecording-indicator.active {
   color: #a55555;
+}
+
+#custom-in-a-call.active {
+  color: #2bb3b1;
+}
+
+#custom-in-a-call.inactive {
+  color: #9b9b9b;
+}
+
+#custom-in-a-call.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
 }
 
 #battery.warning {
