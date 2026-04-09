@@ -3,22 +3,27 @@
 set -euo pipefail
 DOT_BIN="${DOT_BIN:-$HOME/.config/dotfiles/scripts/.local/bin/dot}"
 
-status_json="$("$DOT_BIN" diff --status)"
+status_json="$("$DOT_BIN" diff --waybar)"
 target_dir="$HOME/.config/dotfiles"
 
 if [[ "$status_json" != *'"class":"dots-ok"'* ]]; then
   tooltip="${status_json#*\"tooltip\":\"}"
   tooltip="${tooltip%%\",\"class\":\"*}"
 
-  first_segment="${tooltip#dot diff: }"
+  first_segment="$tooltip"
+  if [[ "$first_segment" == 'Repositories with changes pending: '* ]]; then
+    first_segment="${first_segment#Repositories with changes pending: }"
+  elif [[ "$first_segment" == 'dot diff: '* ]]; then
+    first_segment="${first_segment#dot diff: }"
+  fi
   first_segment="${first_segment%%; *}"
   first_repo="${first_segment%% (*}"
 
   case "$first_repo" in
-    public)
+    public|dotfiles)
       target_dir="$HOME/.config/dotfiles"
       ;;
-    private)
+    private|dotfiles-private)
       target_dir="$HOME/.config/dotfiles-private"
       ;;
     notes)
