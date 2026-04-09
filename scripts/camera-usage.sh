@@ -1,14 +1,20 @@
 #!/bin/bash
 # Outputs camera usage state as JSON for waybar custom module
-# Detects processes with open handles to /dev/video* via /proc
+# Detects processes with open handles to /dev/video* via fuser
 
 declare -A pids_seen
 
-for fd in /proc/[0-9]*/fd/*; do
-  target=$(readlink "$fd" 2>/dev/null) || continue
-  if [[ "$target" == /dev/video* ]]; then
-    pid="${fd#/proc/}"
-    pid="${pid%%/fd/*}"
+shopt -s nullglob
+video_devices=(/dev/video*)
+shopt -u nullglob
+
+if (( ${#video_devices[@]} == 0 )); then
+  echo '{"text": "", "class": "idle"}'
+  exit 0
+fi
+
+for pid in $(fuser "${video_devices[@]}" 2>/dev/null || true); do
+  if [[ "$pid" =~ ^[0-9]+$ ]]; then
     pids_seen["$pid"]=1
   fi
 done
