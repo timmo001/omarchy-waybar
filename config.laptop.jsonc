@@ -1,0 +1,4 @@
+{
+  "include": ["~/.config/waybar/config.jsonc"],
+  "position": "top"
+}
