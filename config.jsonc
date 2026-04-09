@@ -9,6 +9,7 @@
   "modules-right": [
     "custom/update",
     "custom/dot-diff",
+    "custom/twitch-notifications-active",
     "custom/voxtype",
     "group/tray-expander",
     "custom/camera",
@@ -51,6 +52,13 @@
     "interval": 60,
     "format": "{}",
     "on-click": "~/.config/waybar/scripts/dot-diff-terminal.sh",
+    "tooltip": true,
+  },
+  "custom/twitch-notifications-active": {
+    "exec": "twitch-notifications --status-waybar",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{}",
     "tooltip": true,
   },
   "cpu": {
