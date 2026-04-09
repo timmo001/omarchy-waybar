@@ -51,6 +51,7 @@
     "exec": "~/.config/waybar/scripts/dot-diff-waybar.sh",
     "return-type": "json",
     "interval": 60,
+    "signal": 11,
     "format": "{}",
     "on-click": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session changed",
     "on-click-right": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session all",
