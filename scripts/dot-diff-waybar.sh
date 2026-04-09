@@ -31,7 +31,7 @@ fi
 refresh_cache() {
   local status_json rendered_json tmp_file
 
-  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" diff --waybar --no-fetch 2>/dev/null || true)"
+  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" diff --waybar 2>/dev/null || true)"
   if [[ -z "$status_json" ]]; then
     rendered_json="$error_json"
   elif [[ "$status_json" == *'"class":"dots-ok"'* ]]; then
