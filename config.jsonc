@@ -5,7 +5,7 @@
   "spacing": 0,
   "height": 26,
   "modules-left": ["custom/omarchy", "hyprland/workspaces"],
-  "modules-center": ["clock", "custom/update", "custom/dot-diff", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
+  "modules-center": ["clock", "custom/update", "custom/dot-diff", "custom/twitch-notifications-active", "custom/voxtype", "custom/screenrecording-indicator", "custom/idle-indicator", "custom/notification-silencing-indicator"],
   "modules-right": [
     "custom/camera",
     "custom/microphone",
@@ -44,6 +44,13 @@
     "interval": 60,
     "format": "{}",
     "on-click": "~/.config/waybar/scripts/dot-diff-terminal.sh",
+    "tooltip": true
+  },
+  "custom/twitch-notifications-active": {
+    "exec": "twitch-notifications --status-waybar",
+    "return-type": "json",
+    "interval": 5,
+    "format": "{}",
     "tooltip": true
   },
   "cpu": {

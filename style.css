@@ -38,7 +38,7 @@
 #custom-omarchy,
 #custom-sync,
 #custom-dot-diff,
-
+#custom-twitch-notifications-active,
 #custom-update {
   min-width: 12px;
   margin: 0 7.5px;
@@ -65,8 +65,21 @@ tooltip {
 }
 
 #custom-update,
-#custom-dot-diff {
+#custom-dot-diff,
+#custom-twitch-notifications-active {
   font-size: 10px;
+}
+
+#custom-twitch-notifications-active.active {
+  color: #9b9b9b;
+}
+
+#custom-twitch-notifications-active.live {
+  color: #c678dd;
+}
+
+#custom-twitch-notifications-active.inactive {
+  color: #a55555;
 }
 
 #custom-dot-diff.dots-attention {
