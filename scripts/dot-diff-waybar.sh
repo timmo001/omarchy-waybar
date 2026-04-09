@@ -6,7 +6,7 @@ DOT_BIN="${DOT_BIN:-$HOME/.config/dotfiles/scripts/.local/bin/dot}"
 status_json="$("$DOT_BIN" diff --waybar)"
 
 if [[ "$status_json" == *'"class":"dots-ok"'* ]]; then
-  printf '{"text":"","tooltip":"dot diff: all repos clean","class":"dots-ok hidden"}\n'
+  printf '{"text":" 0","tooltip":"dot diff: all repos clean","class":"dots-ok"}\n'
 else
   printf '%s\n' "$status_json"
 fi

@@ -84,7 +84,8 @@ tooltip {
 }
 
 
-#custom-twitch-notifications-active.active {
+#custom-twitch-notifications-active.active,
+#custom-dot-diff.dots-ok {
   color: #9b9b9b;
 }
 
@@ -102,12 +103,6 @@ tooltip {
 
 #custom-dot-diff.dots-extra-only {
   color: #61afef;
-}
-
-#custom-dot-diff.hidden {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
 }
 
 #clock {
