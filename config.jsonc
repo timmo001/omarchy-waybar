@@ -59,6 +59,7 @@
     "return-type": "json",
     "interval": 5,
     "format": "{}",
+    "on-click": "twitch-notifications --recheck",
     "tooltip": true,
   },
   "cpu": {
