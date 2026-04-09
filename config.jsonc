@@ -60,6 +60,7 @@
     "interval": 5,
     "format": "{}",
     "on-click": "twitch-notifications --recheck",
+    "on-click-right": "~/.config/waybar/scripts/twitch-notifications-restart.sh",
     "tooltip": true,
   },
   "cpu": {
