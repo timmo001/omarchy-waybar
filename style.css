@@ -24,7 +24,7 @@
   padding: 0 6px;
   margin: 0 1.5px;
   min-width: 9px;
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 #workspaces button.active {
@@ -37,11 +37,30 @@
 #pulseaudio,
 #custom-omarchy,
 #custom-sync,
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-notification-silencing-indicator,
+#custom-camera,
+#custom-microphone,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
-#custom-update {
+#custom-update,
+#custom-voxtype {
   min-width: 12px;
   margin: 0 7.5px;
+}
+
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-notification-silencing-indicator,
+#custom-camera,
+#custom-microphone,
+#custom-dot-diff,
+#custom-twitch-notifications-active,
+#custom-update,
+#custom-voxtype {
+  font-size: 10px;
+  padding: 0 0 1px;
 }
 
 #tray {
@@ -64,11 +83,6 @@ tooltip {
   padding: 2px;
 }
 
-#custom-update,
-#custom-dot-diff,
-#custom-twitch-notifications-active {
-  font-size: 10px;
-}
 
 #custom-twitch-notifications-active.active {
   color: #9b9b9b;
@@ -104,46 +118,16 @@ tooltip {
   opacity: 0;
 }
 
-
-#custom-screenrecording-indicator,
-#custom-idle-indicator,
-#custom-notification-silencing-indicator {
-  min-width: 12px;
-  margin-left: 5px;
-  margin-right: 0;
-  font-size: 10px;
-  padding-bottom: 1px;
-}
-
 #custom-screenrecording-indicator.active {
   color: #a55555;
 }
 
-#custom-voxtype {
-  min-width: 12px;
-  margin: 0 0 0 7.5px;
+#battery.warning {
+  color: orange;
 }
 
-#custom-voxtype.recording {
-  color: #a55555;
-}
-
-#custom-camera {
-  min-width: 12px;
-  margin: 0 7.5px;
-}
-
-#custom-camera.in-use {
-  color: #a55555;
-}
-
-#custom-microphone {
-  min-width: 12px;
-  margin: 0 7.5px;
-}
-
-#custom-microphone.in-use {
-  color: #a55555;
+#battery.critical {
+  color: red;
 }
 
 #memory.warning {
@@ -164,5 +148,14 @@ tooltip {
 
 #custom-idle-indicator.active,
 #custom-notification-silencing-indicator.active {
+  color: #a55555;
+}
+
+#custom-camera.in-use,
+#custom-microphone.in-use {
+  color: #a55555;
+}
+
+#custom-voxtype.recording {
   color: #a55555;
 }
