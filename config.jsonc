@@ -254,7 +254,7 @@
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=binary_sensor.weather_station_rain_state_piezo'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/home/areas-048a0fd33b134e3689eda6212a41b99d?more-info-entity-id=binary_sensor.weather_station_rain_state_piezo'",
   },
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",
