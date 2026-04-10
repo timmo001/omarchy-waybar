@@ -13,6 +13,7 @@
     "custom/time-check",
     "custom/heating",
     "custom/co2-alert",
+    "custom/voc-alert",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
@@ -197,6 +198,13 @@
   },
   "custom/co2-alert": {
     "exec": "~/.config/waybar/scripts/co2-alert.sh",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 15,
+  },
+  "custom/voc-alert": {
+    "exec": "~/.config/waybar/scripts/voc-alert.sh",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,

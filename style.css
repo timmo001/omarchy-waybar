@@ -42,6 +42,7 @@
 #custom-time-check,
 #custom-heating,
 #custom-co2-alert,
+#custom-voc-alert,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -59,6 +60,7 @@
 #custom-time-check,
 #custom-heating,
 #custom-co2-alert,
+#custom-voc-alert,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -138,22 +140,22 @@ tooltip {
   color: #c678dd;
 }
 
-#custom-heating.heating {
+#custom-heating.heating,
+#custom-co2-alert.warning,
+#custom-voc-alert.warning {
   color: #ff9f1a;
 }
 
-#custom-co2-alert.warning {
-  color: #ff9f1a;
-}
-
-#custom-co2-alert.critical {
+#custom-co2-alert.critical,
+#custom-voc-alert.critical {
   color: #e06c75;
 }
 
 #custom-in-a-call.hidden,
 #custom-time-check.hidden,
 #custom-heating.idle,
-#custom-co2-alert.hidden {
+#custom-co2-alert.hidden,
+#custom-voc-alert.hidden {
   min-width: 0;
   margin: 0;
   padding: 0;
