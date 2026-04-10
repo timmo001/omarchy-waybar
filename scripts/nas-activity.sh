@@ -8,24 +8,30 @@ inactive_script_id=script.turn_off_nas_when_inactive
 line=""
 switch_line=""
 inactive_script_line=""
-coproc NAS_WATCH {
-  go-automate ha watch entity --waybar --icon '' "$entity_id" 2>/dev/null
+
+read_entity_line() {
+  local watch_entity_id="$1"
+  local line=""
+  local watch_pid=""
+
+  coproc ENTITY_WATCH {
+    exec go-automate ha bridge watch entity --waybar --icon '' "$watch_entity_id" 2>/dev/null
+  }
+
+  watch_pid="${ENTITY_WATCH_PID:-}"
+  IFS= read -r line <&"${ENTITY_WATCH[0]}" || true
+
+  if [[ -n "$watch_pid" ]]; then
+    kill -- "-$watch_pid" 2>/dev/null || kill "$watch_pid" 2>/dev/null || true
+    wait "$watch_pid" 2>/dev/null || true
+  fi
+
+  printf '%s' "$line"
 }
-coproc NAS_SWITCH_WATCH {
-  go-automate ha watch entity --waybar --icon '' "$switch_id" 2>/dev/null
-}
-coproc NAS_INACTIVE_SCRIPT_WATCH {
-  go-automate ha watch entity --waybar --icon '' "$inactive_script_id" 2>/dev/null
-}
-IFS= read -r line <&"${NAS_WATCH[0]}"
-IFS= read -r switch_line <&"${NAS_SWITCH_WATCH[0]}"
-IFS= read -r inactive_script_line <&"${NAS_INACTIVE_SCRIPT_WATCH[0]}"
-kill "$NAS_WATCH_PID" 2>/dev/null
-wait "$NAS_WATCH_PID" 2>/dev/null
-kill "$NAS_SWITCH_WATCH_PID" 2>/dev/null
-wait "$NAS_SWITCH_WATCH_PID" 2>/dev/null
-kill "$NAS_INACTIVE_SCRIPT_WATCH_PID" 2>/dev/null
-wait "$NAS_INACTIVE_SCRIPT_WATCH_PID" 2>/dev/null
+
+line="$(read_entity_line "$entity_id")"
+switch_line="$(read_entity_line "$switch_id")"
+inactive_script_line="$(read_entity_line "$inactive_script_id")"
 
 if [[ -z "$line" || -z "$switch_line" || -z "$inactive_script_line" ]]; then
   echo '{"text":"","class":"hidden"}'

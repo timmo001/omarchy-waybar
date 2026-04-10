@@ -2,18 +2,29 @@
 
 line=""
 voc_line=""
-coproc VOC_WATCH {
-  go-automate ha watch entity --waybar --icon '' sensor.apollo_air_1_806d64_voc_quality 2>/dev/null
+
+read_entity_line() {
+  local watch_entity_id="$1"
+  local line=""
+  local watch_pid=""
+
+  coproc ENTITY_WATCH {
+    exec go-automate ha bridge watch entity --waybar --icon '' "$watch_entity_id" 2>/dev/null
+  }
+
+  watch_pid="${ENTITY_WATCH_PID:-}"
+  IFS= read -r line <&"${ENTITY_WATCH[0]}" || true
+
+  if [[ -n "$watch_pid" ]]; then
+    kill -- "-$watch_pid" 2>/dev/null || kill "$watch_pid" 2>/dev/null || true
+    wait "$watch_pid" 2>/dev/null || true
+  fi
+
+  printf '%s' "$line"
 }
-coproc VOC_VALUE_WATCH {
-  go-automate ha watch entity --waybar --icon '' sensor.apollo_air_1_806d64_sen55_voc 2>/dev/null
-}
-IFS= read -r line <&"${VOC_WATCH[0]}"
-IFS= read -r voc_line <&"${VOC_VALUE_WATCH[0]}"
-kill "$VOC_WATCH_PID" 2>/dev/null
-wait "$VOC_WATCH_PID" 2>/dev/null
-kill "$VOC_VALUE_WATCH_PID" 2>/dev/null
-wait "$VOC_VALUE_WATCH_PID" 2>/dev/null
+
+line="$(read_entity_line sensor.apollo_air_1_806d64_voc_quality)"
+voc_line="$(read_entity_line sensor.apollo_air_1_806d64_sen55_voc)"
 
 if [[ -z "$line" || -z "$voc_line" ]]; then
   echo '{"text":"","class":"hidden"}'
