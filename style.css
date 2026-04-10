@@ -11,12 +11,10 @@
   font-size: 12px;
 }
 
-/* Left area */
 .modules-left {
   margin-left: 8px;
 }
 
-/* Right area */
 .modules-right {
   margin-right: 8px;
 }
@@ -80,6 +78,7 @@
 #custom-twitch-notifications-active,
 #custom-update,
 #custom-voxtype {
+  margin: 0 7.5px;
   font-size: 10px;
   padding: 0 0 1px;
 }
@@ -90,7 +89,7 @@
 #custom-voc-alert,
 #custom-rain,
 #custom-temperature {
-  margin-right: 28px;
+  margin: 0 7.5px;
   font-size: 10px;
   padding: 0 0 1px;
 }
