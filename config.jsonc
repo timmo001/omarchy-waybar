@@ -246,7 +246,7 @@
     "format": "{}",
     "tooltip": true,
     "interval": 15,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.apollo_air_1_806d64_voc_quality'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.apollo_air_1_806d64_sen55_voc'",
   },
   "custom/rain": {
     "exec": "go-automate ha bridge watch entity --waybar --icon 󰖖 --tooltip-on 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Raining' --tooltip-off 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Not raining' --class-on raining --class-off hidden --hide-off binary_sensor.weather_station_rain_state_piezo",
