@@ -199,6 +199,7 @@
     "format": "{}",
     "tooltip": true,
     "interval": 30,
+    "on-click": "launch-work-browser --tab 'https://calendar.google.com/calendar/u/0/r?pli=1'",
   },
   "custom/heating": {
     "exec": "go-automate ha watch entity --waybar --icon 󰈸 --tooltip-on 'Heating is active' sensor.thermostat_status",
