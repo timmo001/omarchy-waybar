@@ -102,16 +102,55 @@
   margin-right: 18px;
 }
 
+#clock {
+  margin-left: 8.75px;
+}
+
 tooltip {
   padding: 2px;
 }
 
+/* Status colors */
 #custom-twitch-notifications-active.active,
 #custom-github-workflow-failures.workflow-failures-ok,
 #custom-github-workflow-failures.workflow-failures-unknown,
 #custom-dot-diff.dots-ok,
 #custom-dot-diff.dots-unknown {
   color: #9b9b9b;
+}
+
+#custom-dot-diff.dots-pull-only {
+  color: #98c379;
+}
+
+#custom-dot-diff.dots-extra-only,
+#custom-rain.raining {
+  color: #61afef;
+}
+
+#custom-twitch-notifications-active.live,
+#custom-time-check.active {
+  color: #c678dd;
+}
+
+#custom-in-a-call.active {
+  color: #2bb3b1;
+}
+
+#custom-heating.heating,
+#custom-co2-alert.warning,
+#custom-voc-alert.warning {
+  color: #ff9f1a;
+}
+
+#battery.warning {
+  color: orange;
+}
+
+#custom-dot-diff.dots-attention,
+#memory.warning,
+#cpu.warning {
+  color: #e5c07b;
 }
 
 #custom-github-workflow-failures.workflow-failures-attention,
@@ -122,9 +161,8 @@ tooltip {
   color: #e06c75;
 }
 
-#custom-twitch-notifications-active.live,
-#custom-time-check.active {
-  color: #c678dd;
+#battery.critical {
+  color: red;
 }
 
 #custom-twitch-notifications-active.inactive,
@@ -137,37 +175,9 @@ tooltip {
   color: #a55555;
 }
 
-#custom-dot-diff.dots-attention,
-#memory.warning,
-#cpu.warning {
-  color: #e5c07b;
-}
-
-#custom-dot-diff.dots-pull-only {
-  color: #98c379;
-}
-
-#custom-dot-diff.dots-extra-only,
-#custom-rain.raining {
-  color: #61afef;
-}
-
-#clock {
-  margin-left: 8.75px;
-}
-
+/* Hidden states */
 .hidden {
   opacity: 0;
-}
-
-#custom-in-a-call.active {
-  color: #2bb3b1;
-}
-
-#custom-heating.heating,
-#custom-co2-alert.warning,
-#custom-voc-alert.warning {
-  color: #ff9f1a;
 }
 
 #custom-in-a-call.hidden,
@@ -182,12 +192,4 @@ tooltip {
   margin: 0;
   padding: 0;
   opacity: 0;
-}
-
-#battery.warning {
-  color: orange;
-}
-
-#battery.critical {
-  color: red;
 }
