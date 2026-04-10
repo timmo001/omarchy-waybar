@@ -18,9 +18,9 @@ state=${state%%\"*}
 state_normalized=${state,,}
 
 if [[ "$state_normalized" == "extremely abnormal" ]]; then
-  printf '{"text":"󰴃","class":"critical","tooltip":"VOC %s"}\n' "$state"
+  printf '{"text":"󰵃","class":"critical","tooltip":"VOC %s"}\n' "$state"
 elif [[ "$state_normalized" == "very abnormal" ]]; then
-  printf '{"text":"󰴃","class":"warning","tooltip":"VOC %s"}\n' "$state"
+  printf '{"text":"󰵃","class":"warning","tooltip":"VOC %s"}\n' "$state"
 else
   echo '{"text":"","class":"hidden"}'
 fi
