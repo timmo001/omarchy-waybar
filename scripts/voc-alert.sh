@@ -33,9 +33,9 @@ if [[ ! "$voc_value" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
 fi
 
 if [[ "$state_normalized" == "extremely abnormal" ]]; then
-  printf '{"text":"󰵃 %.0f","class":"critical","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): %.0f\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$voc_value" "$voc_value" "$state"
+  printf '{"text":"󰵃 %.0f","class":"critical","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): %.0f\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s"}\n' "$voc_value" "$voc_value" "$state"
 elif [[ "$state_normalized" == "very abnormal" ]]; then
-  printf '{"text":"󰵃 %.0f","class":"warning","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): %.0f\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$voc_value" "$voc_value" "$state"
+  printf '{"text":"󰵃 %.0f","class":"warning","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): %.0f\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s"}\n' "$voc_value" "$voc_value" "$state"
 else
   echo '{"text":"","class":"hidden"}'
 fi
