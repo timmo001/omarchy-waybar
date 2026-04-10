@@ -58,6 +58,11 @@ tooltip {
 }
 
 /* Left */
+#custom-current-next-event {
+  font-size: 10px;
+  padding: 0 0 1px;
+}
+
 #workspaces button {
   all: initial;
   padding: 0 6px;
