@@ -178,7 +178,7 @@
     "return-type": "json",
   },
   "custom/in-a-call": {
-    "exec": "go-automate ha watch entity --waybar --icon  --tooltip-on 'In a call' --tooltip-off 'Not in a call' --class-on active --class-off inactive --hide-off input_boolean.in_a_call",
+    "exec": "go-automate ha bridge watch entity --waybar --icon  --tooltip-on 'In a call' --tooltip-off 'Not in a call' --class-on active --class-off inactive --hide-off input_boolean.in_a_call",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -186,7 +186,7 @@
     "on-click": "timmo-run-command go-automate ha ib t in_a_call",
   },
   "custom/time-check": {
-    "exec": "go-automate ha watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Check the time' --tooltip-off 'Time check inactive' --class-on active --class-off inactive --hide-off input_boolean.time_check",
+    "exec": "go-automate ha bridge watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Check the time' --tooltip-off 'Time check inactive' --class-on active --class-off inactive --hide-off input_boolean.time_check",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -202,7 +202,7 @@
     "on-click": "launch-work-browser --tab 'https://calendar.google.com/calendar/u/0/r?pli=1'",
   },
   "custom/heating": {
-    "exec": "go-automate ha watch entity --waybar --icon 󰈸 --tooltip-on 'Heating is active' sensor.thermostat_status",
+    "exec": "go-automate ha bridge watch entity --waybar --icon 󰈸 --tooltip-on 'Heating is active' sensor.thermostat_status",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
