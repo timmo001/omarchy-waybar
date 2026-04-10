@@ -145,10 +145,6 @@ tooltip {
   color: #c678dd;
 }
 
-#custom-time-check.active::after {
-  content: " Check time";
-}
-
 #custom-time-check.inactive {
   color: #9b9b9b;
 }
