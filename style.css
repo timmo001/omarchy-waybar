@@ -50,7 +50,8 @@
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
-#custom-voxtype {
+#custom-voxtype,
+#custom-current-next-event {
   min-width: 12px;
   margin: 0 7.5px;
 }
@@ -153,6 +154,7 @@ tooltip {
 
 #custom-in-a-call.hidden,
 #custom-time-check.hidden,
+#custom-current-next-event.hidden,
 #custom-heating.idle,
 #custom-co2-alert.hidden,
 #custom-voc-alert.hidden {

@@ -22,6 +22,7 @@
     "custom/twitch-notifications-active",
   ],
   "modules-right": [
+    "custom/current-next-event",
     "group/tray-expander",
     "bluetooth",
     "network",
@@ -188,6 +189,13 @@
     "tooltip": true,
     "restart-interval": 5,
     "on-click": "timmo-run-command go-automate ha ib t time_check",
+  },
+  "custom/current-next-event": {
+    "exec": "~/.config/waybar/scripts/current-next-event.sh",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 30,
   },
   "custom/heating": {
     "exec": "go-automate ha watch entity --waybar --icon 󰈸 --tooltip-on 'Heating is active' sensor.thermostat_status",
