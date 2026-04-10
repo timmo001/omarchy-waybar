@@ -7,6 +7,6 @@
     "format": " {} °C",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=sensor.meter_d828_temperature'"
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/office?more-info-entity-id=sensor.meter_d828_temperature'"
   }
 }

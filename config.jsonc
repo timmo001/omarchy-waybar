@@ -94,7 +94,7 @@
     "format": " {} °C",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=sensor.meter_plus_378b_temperature'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/living-room?more-info-entity-id=sensor.meter_plus_378b_temperature'",
   },
   "cpu": {
     "interval": 5,
