@@ -84,7 +84,7 @@
     "return-type": "json",
     "interval": 5,
     "format": "{}",
-    "on-click": "~/.config/waybar/scripts/twitch-notifications-recheck.sh",
+    "on-click": "~/.config/waybar/scripts/twitch-menu.sh",
     "on-click-right": "~/.config/waybar/scripts/twitch-notifications-restart.sh",
     "tooltip": true,
   },
