@@ -10,6 +10,7 @@
     "custom/voxtype",
     "custom/screenrecording-indicator",
     "custom/in-a-call",
+    "custom/time-check",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
@@ -176,6 +177,14 @@
     "tooltip": true,
     "restart-interval": 5,
     "on-click": "timmo-run-command go-automate ha ib t in_a_call",
+  },
+  "custom/time-check": {
+    "exec": "go-automate ha watch entity --waybar --icon 󱑎 --tooltip-on 'Check the time' --tooltip-off 'Time check inactive' --class-on active --class-off inactive --hide-off input_boolean.time_check",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "restart-interval": 5,
+    "on-click": "timmo-run-command go-automate ha ib t time_check",
   },
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",

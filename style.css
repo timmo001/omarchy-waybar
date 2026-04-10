@@ -39,6 +39,7 @@
 #custom-sync,
 #custom-screenrecording-indicator,
 #custom-in-a-call,
+#custom-time-check,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -53,6 +54,7 @@
 
 #custom-screenrecording-indicator,
 #custom-in-a-call,
+#custom-time-check,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -133,6 +135,25 @@ tooltip {
 }
 
 #custom-in-a-call.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+#custom-time-check.active {
+  color: #c678dd;
+}
+
+#custom-time-check.active::after {
+  content: " Check time";
+}
+
+#custom-time-check.inactive {
+  color: #9b9b9b;
+}
+
+#custom-time-check.hidden {
   min-width: 0;
   margin: 0;
   padding: 0;
