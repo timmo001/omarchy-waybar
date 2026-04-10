@@ -24,9 +24,9 @@ fi
 co2_ppm=${state%%.*}
 
 if (( co2_ppm > 2000 )); then
-  printf '{"text":"󰟤","class":"critical","tooltip":"CO2 %.0f ppm"}\n' "$state"
+  printf '{"text":"󰟤 %.0f ppm","class":"critical","tooltip":"CO2 %.0f ppm"}\n' "$state" "$state"
 elif (( co2_ppm > 1400 )); then
-  printf '{"text":"󰟤","class":"warning","tooltip":"CO2 %.0f ppm"}\n' "$state"
+  printf '{"text":"󰟤 %.0f ppm","class":"warning","tooltip":"CO2 %.0f ppm"}\n' "$state" "$state"
 else
   echo '{"text":"","class":"hidden"}'
 fi

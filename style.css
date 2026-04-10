@@ -51,6 +51,7 @@
 #custom-microphone,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
+#custom-temperature,
 #custom-update,
 #custom-voxtype,
 #custom-current-next-event {
@@ -60,6 +61,12 @@
 
 #custom-current-next-event {
   margin-left: 28px;
+}
+
+#custom-co2-alert,
+#custom-voc-alert,
+#custom-temperature {
+  margin-right: 28px;
 }
 
 #custom-screenrecording-indicator,
@@ -74,6 +81,7 @@
 #custom-microphone,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
+#custom-temperature,
 #custom-update,
 #custom-voxtype {
   font-size: 10px;
