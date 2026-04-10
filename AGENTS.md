@@ -12,4 +12,4 @@ Instructions for agents editing this Waybar config.
 ## Script Safety
 
 - Avoid spawning long-lived orphan watcher processes from interval scripts.
-- If a script polls only one value, use bounded execution (`timeout`) and stop after the first emitted line.
+- If a script polls only one value, read one line then terminate the watcher process group immediately.
