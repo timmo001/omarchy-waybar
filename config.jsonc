@@ -86,7 +86,7 @@
     "interval": 5,
     "format": "{}",
     "on-click": "~/.local/bin/twitch-menu",
-    "on-click-right": "~/.config/waybar/scripts/twitch-notifications-restart.sh",
+    "on-click-right": "~/.config/dotfiles/scripts/.local/bin/twitch-notifications-restart",
     "tooltip": true,
   },
   "custom/temperature": {
