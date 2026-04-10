@@ -132,36 +132,16 @@ tooltip {
   color: #2bb3b1;
 }
 
-#custom-in-a-call.inactive {
-  color: #9b9b9b;
-}
-
-#custom-in-a-call.hidden {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-}
-
 #custom-time-check.active {
   color: #c678dd;
-}
-
-#custom-time-check.inactive {
-  color: #9b9b9b;
-}
-
-#custom-time-check.hidden {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
 }
 
 #custom-heating.heating {
   color: #ff9f1a;
 }
 
+#custom-in-a-call.hidden,
+#custom-time-check.hidden,
 #custom-heating.idle {
   min-width: 0;
   margin: 0;
