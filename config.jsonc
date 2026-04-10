@@ -12,6 +12,7 @@
   "modules-center": [
     "custom/time-check",
     "custom/in-a-call",
+    "custom/nas-activity",
     "custom/github-workflow-failures",
     "custom/dot-diff",
     "custom/twitch-notifications-active",
@@ -206,6 +207,14 @@
     "restart-interval": 5,
     "on-click": "timmo-run-command go-automate ha ib t in_a_call",
     "on-click-right": "timmo-run-command go-automate ha ib t in_a_call",
+  },
+  "custom/nas-activity": {
+    "exec": "~/.config/waybar/scripts/nas-activity.sh",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 5,
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=sensor.nas_activity'",
   },
   "custom/time-check": {
     "exec": "go-automate ha bridge watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Time Check (input_boolean.time_check): On' --tooltip-off 'Time Check (input_boolean.time_check): Off' --class-on active --class-off inactive --hide-off input_boolean.time_check",

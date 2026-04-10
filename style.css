@@ -37,6 +37,7 @@
 #custom-camera,
 #custom-microphone,
 #custom-heating,
+#custom-nas-activity,
 #custom-voc-alert,
 #custom-co2-alert,
 #custom-rain,
@@ -157,6 +158,7 @@ tooltip {
 
 /* Right */
 #custom-heating,
+#custom-nas-activity,
 #custom-voc-alert,
 #custom-co2-alert,
 #custom-rain,
