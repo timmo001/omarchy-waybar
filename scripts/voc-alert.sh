@@ -18,9 +18,9 @@ state=${state%%\"*}
 state_normalized=${state,,}
 
 if [[ "$state_normalized" == "extremely abnormal" ]]; then
-  printf '{"text":"󰵃 %s IAQ","class":"critical","tooltip":"Apollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$state" "$state"
+  printf '{"text":"󰵃","class":"critical","tooltip":"Apollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$state"
 elif [[ "$state_normalized" == "very abnormal" ]]; then
-  printf '{"text":"󰵃 %s IAQ","class":"warning","tooltip":"Apollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$state" "$state"
+  printf '{"text":"󰵃","class":"warning","tooltip":"Apollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): %s IAQ"}\n' "$state"
 else
   echo '{"text":"","class":"hidden"}'
 fi

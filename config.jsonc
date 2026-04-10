@@ -24,8 +24,8 @@
   ],
   "modules-right": [
     "custom/heating",
-    "custom/co2-alert",
     "custom/voc-alert",
+    "custom/co2-alert",
     "custom/temperature",
     "group/tray-expander",
     "bluetooth",
