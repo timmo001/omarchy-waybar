@@ -12,6 +12,7 @@
     "custom/in-a-call",
     "custom/time-check",
     "custom/heating",
+    "custom/co2-alert",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
@@ -193,6 +194,13 @@
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
+  },
+  "custom/co2-alert": {
+    "exec": "~/.config/waybar/scripts/co2-alert.sh",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 15,
   },
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",
