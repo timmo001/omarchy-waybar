@@ -81,7 +81,7 @@
     "tooltip": true,
   },
   "custom/twitch-notifications-active": {
-    "exec": "twitch-notifications --status-waybar",
+    "exec": "twitch-notifications --status-waybar --max-chars 60",
     "return-type": "json",
     "interval": 5,
     "format": "{}",
