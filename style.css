@@ -1,5 +1,6 @@
 @import "../omarchy/current/theme/waybar.css";
 
+/* All / mixed */
 * {
   background-color: @background;
   color: @foreground;
@@ -19,6 +20,44 @@
   margin-right: 8px;
 }
 
+#custom-omarchy,
+#custom-sync,
+#workspaces,
+#custom-current-next-event,
+#custom-time-check,
+#custom-in-a-call,
+#custom-github-workflow-failures,
+#custom-dot-diff,
+#custom-twitch-notifications-active,
+#custom-update,
+#custom-voxtype,
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-notification-silencing-indicator,
+#custom-camera,
+#custom-microphone,
+#custom-heating,
+#custom-voc-alert,
+#custom-co2-alert,
+#custom-rain,
+#custom-temperature,
+#pulseaudio,
+#cpu,
+#memory,
+#battery {
+  min-width: 12px;
+  margin: 0 7.5px;
+}
+
+tooltip {
+  padding: 2px;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* Left */
 #workspaces button {
   all: initial;
   padding: 0 6px;
@@ -31,59 +70,123 @@
   opacity: 1;
 }
 
-#workspaces,
-#cpu,
-#memory,
-#battery,
-#pulseaudio,
-#custom-omarchy,
-#custom-sync,
-#custom-screenrecording-indicator,
-#custom-in-a-call,
-#custom-time-check,
-#custom-heating,
-#custom-co2-alert,
-#custom-voc-alert,
-#custom-rain,
-#custom-idle-indicator,
-#custom-notification-silencing-indicator,
-#custom-camera,
-#custom-microphone,
-#custom-github-workflow-failures,
-#custom-dot-diff,
-#custom-twitch-notifications-active,
-#custom-temperature,
-#custom-update,
-#custom-voxtype,
-#custom-current-next-event {
-  min-width: 12px;
-  margin: 0 7.5px;
-}
-
 #custom-current-next-event {
   margin-left: 28px;
 }
 
-/* Compact indicator modules */
-#custom-screenrecording-indicator,
-#custom-in-a-call,
+#custom-current-next-event.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+/* Center */
 #custom-time-check,
-#custom-idle-indicator,
-#custom-notification-silencing-indicator,
-#custom-camera,
-#custom-microphone,
+#custom-in-a-call,
 #custom-github-workflow-failures,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
-#custom-heating,
-#custom-co2-alert,
-#custom-voc-alert,
-#custom-rain,
-#custom-temperature,
-#custom-voxtype {
+#custom-voxtype,
+#custom-screenrecording-indicator,
+#custom-idle-indicator,
+#custom-notification-silencing-indicator,
+#custom-camera,
+#custom-microphone {
   font-size: 10px;
   padding: 0 0 1px;
+}
+
+#custom-time-check.active,
+#custom-twitch-notifications-active.live {
+  color: #c678dd;
+}
+
+#custom-time-check.hidden,
+#custom-in-a-call.hidden,
+#custom-github-workflow-failures.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+#custom-in-a-call.active {
+  color: #2bb3b1;
+}
+
+#custom-github-workflow-failures.workflow-failures-ok,
+#custom-github-workflow-failures.workflow-failures-unknown,
+#custom-dot-diff.dots-ok,
+#custom-dot-diff.dots-unknown,
+#custom-twitch-notifications-active.active {
+  color: #9b9b9b;
+}
+
+#custom-github-workflow-failures.workflow-failures-attention {
+  color: #e06c75;
+}
+
+#custom-dot-diff.dots-attention {
+  color: #e5c07b;
+}
+
+#custom-dot-diff.dots-pull-only {
+  color: #98c379;
+}
+
+#custom-dot-diff.dots-extra-only {
+  color: #61afef;
+}
+
+#custom-twitch-notifications-active.inactive,
+#custom-screenrecording-indicator.active,
+#custom-idle-indicator.active,
+#custom-notification-silencing-indicator.active,
+#custom-camera.in-use,
+#custom-microphone.in-use,
+#custom-voxtype.recording {
+  color: #a55555;
+}
+
+/* Right */
+#custom-heating,
+#custom-voc-alert,
+#custom-co2-alert,
+#custom-rain,
+#custom-temperature {
+  font-size: 10px;
+  padding: 0 0 1px;
+}
+
+#custom-heating.heating,
+#custom-voc-alert.warning,
+#custom-co2-alert.warning {
+  color: #ff9f1a;
+}
+
+#custom-heating.idle,
+#custom-voc-alert.hidden,
+#custom-co2-alert.hidden,
+#custom-rain.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+#custom-voc-alert.critical,
+#custom-co2-alert.critical {
+  color: #e06c75;
+}
+
+#custom-rain.raining {
+  color: #61afef;
+}
+
+#custom-expand-icon {
+  margin-right: 18px;
 }
 
 #tray {
@@ -98,98 +201,24 @@
   margin-right: 13px;
 }
 
-#custom-expand-icon {
-  margin-right: 18px;
+#cpu.warning,
+#memory.warning {
+  color: #e5c07b;
 }
 
-#clock {
-  margin-left: 8.75px;
-}
-
-tooltip {
-  padding: 2px;
-}
-
-/* Status colors */
-#custom-twitch-notifications-active.active,
-#custom-github-workflow-failures.workflow-failures-ok,
-#custom-github-workflow-failures.workflow-failures-unknown,
-#custom-dot-diff.dots-ok,
-#custom-dot-diff.dots-unknown {
-  color: #9b9b9b;
-}
-
-#custom-dot-diff.dots-pull-only {
-  color: #98c379;
-}
-
-#custom-dot-diff.dots-extra-only,
-#custom-rain.raining {
-  color: #61afef;
-}
-
-#custom-twitch-notifications-active.live,
-#custom-time-check.active {
-  color: #c678dd;
-}
-
-#custom-in-a-call.active {
-  color: #2bb3b1;
-}
-
-#custom-heating.heating,
-#custom-co2-alert.warning,
-#custom-voc-alert.warning {
-  color: #ff9f1a;
+#cpu.critical,
+#memory.critical {
+  color: #e06c75;
 }
 
 #battery.warning {
   color: orange;
 }
 
-#custom-dot-diff.dots-attention,
-#memory.warning,
-#cpu.warning {
-  color: #e5c07b;
-}
-
-#custom-github-workflow-failures.workflow-failures-attention,
-#custom-co2-alert.critical,
-#custom-voc-alert.critical,
-#memory.critical,
-#cpu.critical {
-  color: #e06c75;
-}
-
 #battery.critical {
   color: red;
 }
 
-#custom-twitch-notifications-active.inactive,
-#custom-screenrecording-indicator.active,
-#custom-idle-indicator.active,
-#custom-notification-silencing-indicator.active,
-#custom-camera.in-use,
-#custom-microphone.in-use,
-#custom-voxtype.recording {
-  color: #a55555;
-}
-
-/* Hidden states */
-.hidden {
-  opacity: 0;
-}
-
-#custom-in-a-call.hidden,
-#custom-time-check.hidden,
-#custom-current-next-event.hidden,
-#custom-github-workflow-failures.hidden,
-#custom-heating.idle,
-#custom-co2-alert.hidden,
-#custom-voc-alert.hidden,
-#custom-rain.hidden {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
+#clock {
+  margin-left: 8.75px;
 }
