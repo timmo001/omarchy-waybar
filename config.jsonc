@@ -214,7 +214,7 @@
     "format": "{}",
     "tooltip": true,
     "interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=sensor.nas_activity'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/network?more-info-entity-id=sensor.nas_activity'",
   },
   "custom/time-check": {
     "exec": "go-automate ha bridge watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Time Check (input_boolean.time_check): On' --tooltip-off 'Time Check (input_boolean.time_check): Off' --class-on active --class-off inactive --hide-off input_boolean.time_check",
