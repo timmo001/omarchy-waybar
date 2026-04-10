@@ -168,9 +168,16 @@ tooltip {
 }
 
 #custom-heating.heating,
-#custom-voc-alert.warning,
 #custom-co2-alert.warning {
-  color: #ff9f1a;
+  color: #e7ad63;
+}
+
+#custom-voc-alert.warning {
+  color: #c6a47a;
+}
+
+#custom-temperature {
+  color: #fef6ea;
 }
 
 #custom-nas-activity.active {
@@ -187,9 +194,12 @@ tooltip {
   opacity: 0;
 }
 
-#custom-voc-alert.critical,
 #custom-co2-alert.critical {
-  color: #e06c75;
+  color: #d56f69;
+}
+
+#custom-voc-alert.critical {
+  color: #bf6a4e;
 }
 
 #custom-rain.raining {

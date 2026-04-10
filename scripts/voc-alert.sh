@@ -2,6 +2,15 @@
 
 line=""
 voc_line=""
+FAKE_STATE=${WAYBAR_FAKE_VOC_ALERT:-}
+
+if [[ "$FAKE_STATE" == "critical" ]]; then
+  printf '{"text":"󰵃 410","class":"critical","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): 410\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): Extremely abnormal"}\n'
+  exit 0
+elif [[ "$FAKE_STATE" == "warning" ]]; then
+  printf '{"text":"󰵃 240","class":"warning","tooltip":"Apollo Air 1 VOC (sensor.apollo_air_1_806d64_sen55_voc): 240\\nApollo Air 1 VOC Quality (sensor.apollo_air_1_806d64_voc_quality): Very abnormal"}\n'
+  exit 0
+fi
 
 read_entity_line() {
   local watch_entity_id="$1"

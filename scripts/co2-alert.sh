@@ -2,6 +2,15 @@
 
 SENSOR_ENTITY=${1:-sensor.apollo_air_1_806d64_co2}
 SENSOR_LABEL=${2:-Apollo Air 1 CO2}
+FAKE_STATE=${WAYBAR_FAKE_CO2_ALERT:-}
+
+if [[ "$FAKE_STATE" == "critical" ]]; then
+  printf '{"text":"󰟤 2200 ppm","class":"critical","tooltip":"%s (%s): 2200 ppm"}\n' "$SENSOR_LABEL" "$SENSOR_ENTITY"
+  exit 0
+elif [[ "$FAKE_STATE" == "warning" ]]; then
+  printf '{"text":"󰟤 1600 ppm","class":"warning","tooltip":"%s (%s): 1600 ppm"}\n' "$SENSOR_LABEL" "$SENSOR_ENTITY"
+  exit 0
+fi
 
 read_entity_line() {
   local watch_entity_id="$1"
