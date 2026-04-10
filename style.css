@@ -11,10 +11,12 @@
   font-size: 12px;
 }
 
+/* Left area */
 .modules-left {
   margin-left: 8px;
 }
 
+/* Right area */
 .modules-right {
   margin-right: 8px;
 }
@@ -63,27 +65,28 @@
   margin-left: 28px;
 }
 
-#custom-co2-alert,
-#custom-voc-alert,
-#custom-temperature {
-  margin-right: 28px;
-}
-
+/* Center area */
 #custom-screenrecording-indicator,
 #custom-in-a-call,
 #custom-time-check,
-#custom-heating,
-#custom-co2-alert,
-#custom-voc-alert,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
 #custom-microphone,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
-#custom-temperature,
 #custom-update,
 #custom-voxtype {
+  font-size: 10px;
+  padding: 0 0 1px;
+}
+
+/* Right area */
+#custom-heating,
+#custom-co2-alert,
+#custom-voc-alert,
+#custom-temperature {
+  margin-right: 28px;
   font-size: 10px;
   padding: 0 0 1px;
 }
