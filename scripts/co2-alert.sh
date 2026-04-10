@@ -1,9 +1,17 @@
 #!/bin/bash
 
-line=$(
-  go-automate ha watch entity --waybar --icon '' sensor.apollo_air_1_806d64_co2 2>/dev/null |
-    { IFS= read -r first_line; printf '%s\n' "$first_line"; }
-)
+line=""
+coproc CO2_WATCH {
+  go-automate ha watch entity --waybar --icon '' sensor.apollo_air_1_806d64_co2 2>/dev/null
+}
+IFS= read -r line <&"${CO2_WATCH[0]}"
+kill "$CO2_WATCH_PID" 2>/dev/null
+wait "$CO2_WATCH_PID" 2>/dev/null
+
+if [[ -z "$line" ]]; then
+  echo '{"text":"","class":"hidden"}'
+  exit 0
+fi
 
 state=${line#*\"class\":\"}
 state=${state%%\"*}
