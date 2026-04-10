@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-choice="$(printf '%s\n' 'Recheck Twitch notifications' 'Restart Twitch notifications' 'Open Twitch following live' | omarchy-launch-walker --dmenu --width 295 --minheight 1 --maxheight 630 -p 'Twitch…' 2>/dev/null || true)"
+choice="$(printf '%s\n' 'Recheck Twitch notifications' 'Restart Twitch notifications' 'Open all live Twitch autostart channels' 'Open Twitch following live' | omarchy-launch-walker --dmenu --width 295 --minheight 1 --maxheight 630 -p 'Twitch…' 2>/dev/null || true)"
 
 case "$choice" in
   'Recheck Twitch notifications')
@@ -12,5 +12,8 @@ case "$choice" in
     ;;
   'Open Twitch following live')
     exec omarchy-launch-webapp 'https://twitch.tv/directory/following/live'
+    ;;
+  'Open all live Twitch autostart channels')
+    exec twitch-notifications --recheck --open
     ;;
 esac
