@@ -19,7 +19,6 @@
   margin-right: 8px;
 }
 
-
 #workspaces button {
   all: initial;
   padding: 0 6px;
@@ -65,7 +64,7 @@
   margin-left: 28px;
 }
 
-/* Center area */
+/* Compact indicator modules */
 #custom-screenrecording-indicator,
 #custom-in-a-call,
 #custom-time-check,
@@ -77,19 +76,12 @@
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
-#custom-voxtype {
-  margin: 0 7.5px;
-  font-size: 10px;
-  padding: 0 0 1px;
-}
-
-/* Right area */
 #custom-heating,
 #custom-co2-alert,
 #custom-voc-alert,
 #custom-rain,
-#custom-temperature {
-  margin: 0 7.5px;
+#custom-temperature,
+#custom-voxtype {
   font-size: 10px;
   padding: 0 0 1px;
 }
@@ -114,7 +106,6 @@ tooltip {
   padding: 2px;
 }
 
-
 #custom-twitch-notifications-active.active,
 #custom-github-workflow-failures.workflow-failures-ok,
 #custom-github-workflow-failures.workflow-failures-unknown,
@@ -123,19 +114,32 @@ tooltip {
   color: #9b9b9b;
 }
 
-#custom-github-workflow-failures.workflow-failures-attention {
+#custom-github-workflow-failures.workflow-failures-attention,
+#custom-co2-alert.critical,
+#custom-voc-alert.critical,
+#memory.critical,
+#cpu.critical {
   color: #e06c75;
 }
 
-#custom-twitch-notifications-active.live {
+#custom-twitch-notifications-active.live,
+#custom-time-check.active {
   color: #c678dd;
 }
 
-#custom-twitch-notifications-active.inactive {
+#custom-twitch-notifications-active.inactive,
+#custom-screenrecording-indicator.active,
+#custom-idle-indicator.active,
+#custom-notification-silencing-indicator.active,
+#custom-camera.in-use,
+#custom-microphone.in-use,
+#custom-voxtype.recording {
   color: #a55555;
 }
 
-#custom-dot-diff.dots-attention {
+#custom-dot-diff.dots-attention,
+#memory.warning,
+#cpu.warning {
   color: #e5c07b;
 }
 
@@ -143,7 +147,8 @@ tooltip {
   color: #98c379;
 }
 
-#custom-dot-diff.dots-extra-only {
+#custom-dot-diff.dots-extra-only,
+#custom-rain.raining {
   color: #61afef;
 }
 
@@ -155,31 +160,14 @@ tooltip {
   opacity: 0;
 }
 
-#custom-screenrecording-indicator.active {
-  color: #a55555;
-}
-
 #custom-in-a-call.active {
   color: #2bb3b1;
-}
-
-#custom-time-check.active {
-  color: #c678dd;
 }
 
 #custom-heating.heating,
 #custom-co2-alert.warning,
 #custom-voc-alert.warning {
   color: #ff9f1a;
-}
-
-#custom-rain.raining {
-  color: #61afef;
-}
-
-#custom-co2-alert.critical,
-#custom-voc-alert.critical {
-  color: #e06c75;
 }
 
 #custom-in-a-call.hidden,
@@ -202,34 +190,4 @@ tooltip {
 
 #battery.critical {
   color: red;
-}
-
-#memory.warning {
-  color: #e5c07b;
-}
-
-#memory.critical {
-  color: #e06c75;
-}
-
-#cpu.warning {
-  color: #e5c07b;
-}
-
-#cpu.critical {
-  color: #e06c75;
-}
-
-#custom-idle-indicator.active,
-#custom-notification-silencing-indicator.active {
-  color: #a55555;
-}
-
-#custom-camera.in-use,
-#custom-microphone.in-use {
-  color: #a55555;
-}
-
-#custom-voxtype.recording {
-  color: #a55555;
 }
