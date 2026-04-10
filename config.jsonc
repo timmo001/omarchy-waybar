@@ -11,6 +11,7 @@
     "custom/screenrecording-indicator",
     "custom/in-a-call",
     "custom/time-check",
+    "custom/heating",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
@@ -185,6 +186,13 @@
     "tooltip": true,
     "restart-interval": 5,
     "on-click": "timmo-run-command go-automate ha ib t time_check",
+  },
+  "custom/heating": {
+    "exec": "go-automate ha watch entity --waybar --icon 󰈸 --tooltip-on 'Heating is active' sensor.thermostat_status",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "restart-interval": 5,
   },
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",

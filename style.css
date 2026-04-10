@@ -40,6 +40,7 @@
 #custom-screenrecording-indicator,
 #custom-in-a-call,
 #custom-time-check,
+#custom-heating,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -55,6 +56,7 @@
 #custom-screenrecording-indicator,
 #custom-in-a-call,
 #custom-time-check,
+#custom-heating,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
@@ -150,6 +152,17 @@ tooltip {
 }
 
 #custom-time-check.hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+#custom-heating.heating {
+  color: #ff9f1a;
+}
+
+#custom-heating.idle {
   min-width: 0;
   margin: 0;
   padding: 0;
