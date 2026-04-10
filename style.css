@@ -173,6 +173,10 @@ tooltip {
   color: #ff9f1a;
 }
 
+#custom-nas-activity.active {
+  color: #2bb3b1;
+}
+
 #custom-heating.idle,
 #custom-voc-alert.hidden,
 #custom-co2-alert.hidden,
