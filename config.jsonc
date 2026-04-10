@@ -204,7 +204,7 @@
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=input_boolean.in_a_call'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/office?more-info-entity-id=input_boolean.in_a_call'",
     "on-click-right": "timmo-run-command go-automate ha ib t in_a_call",
   },
   "custom/time-check": {
@@ -213,7 +213,7 @@
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=input_boolean.time_check'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/office?more-info-entity-id=input_boolean.time_check'",
     "on-click-right": "timmo-run-command go-automate ha ib t time_check",
   },
   "custom/current-next-event": {
