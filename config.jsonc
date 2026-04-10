@@ -4,7 +4,11 @@
   "position": "top",
   "spacing": 0,
   "height": 26,
-  "modules-left": ["custom/omarchy", "hyprland/workspaces"],
+  "modules-left": [
+    "custom/omarchy",
+    "hyprland/workspaces",
+    "custom/current-next-event",
+  ],
   "modules-center": [
     "custom/update",
     "custom/voxtype",
@@ -22,7 +26,6 @@
     "custom/twitch-notifications-active",
   ],
   "modules-right": [
-    "custom/current-next-event",
     "group/tray-expander",
     "bluetooth",
     "network",
