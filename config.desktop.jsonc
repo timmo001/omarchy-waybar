@@ -8,5 +8,20 @@
     "tooltip": true,
     "restart-interval": 5,
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/office?more-info-entity-id=sensor.meter_d828_temperature'"
+  },
+  "custom/co2-alert": {
+    "exec": "~/.config/waybar/scripts/co2-alert.sh sensor.everything_presence_lite_301394_co2 'Everything Presence Lite CO2'",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": true,
+    "interval": 15,
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.everything_presence_lite_301394_co2'"
+  },
+  "custom/voc-alert": {
+    "exec": "printf '{\"text\":\"\",\"class\":\"hidden\"}\\n'",
+    "return-type": "json",
+    "format": "{}",
+    "tooltip": false,
+    "interval": 3600
   }
 }

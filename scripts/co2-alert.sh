@@ -1,8 +1,11 @@
 #!/bin/bash
 
+SENSOR_ENTITY=${1:-sensor.apollo_air_1_806d64_co2}
+SENSOR_LABEL=${2:-Apollo Air 1 CO2}
+
 line=""
 coproc CO2_WATCH {
-  go-automate ha watch entity --waybar --icon '' sensor.apollo_air_1_806d64_co2 2>/dev/null
+  go-automate ha watch entity --waybar --icon '' "$SENSOR_ENTITY" 2>/dev/null
 }
 IFS= read -r line <&"${CO2_WATCH[0]}"
 kill "$CO2_WATCH_PID" 2>/dev/null
@@ -24,9 +27,9 @@ fi
 co2_ppm=${state%%.*}
 
 if (( co2_ppm > 2000 )); then
-  printf '{"text":"󰟤 %.0f ppm","class":"critical","tooltip":"Apollo Air 1 CO2 (sensor.apollo_air_1_806d64_co2): %.0f ppm"}\n' "$state" "$state"
+  printf '{"text":"󰟤 %.0f ppm","class":"critical","tooltip":"%s (%s): %.0f ppm"}\n' "$state" "$SENSOR_LABEL" "$SENSOR_ENTITY" "$state"
 elif (( co2_ppm > 1400 )); then
-  printf '{"text":"󰟤 %.0f ppm","class":"warning","tooltip":"Apollo Air 1 CO2 (sensor.apollo_air_1_806d64_co2): %.0f ppm"}\n' "$state" "$state"
+  printf '{"text":"󰟤 %.0f ppm","class":"warning","tooltip":"%s (%s): %.0f ppm"}\n' "$state" "$SENSOR_LABEL" "$SENSOR_ENTITY" "$state"
 else
   echo '{"text":"","class":"hidden"}'
 fi
