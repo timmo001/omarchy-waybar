@@ -179,7 +179,7 @@
     "on-click": "timmo-run-command go-automate ha ib t in_a_call",
   },
   "custom/time-check": {
-    "exec": "go-automate ha watch entity --waybar --icon 󱑎 --tooltip-on 'Check the time' --tooltip-off 'Time check inactive' --class-on active --class-off inactive --hide-off input_boolean.time_check",
+    "exec": "go-automate ha watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Check the time' --tooltip-off 'Time check inactive' --class-on active --class-off inactive --hide-off input_boolean.time_check",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
