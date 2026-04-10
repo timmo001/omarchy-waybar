@@ -12,6 +12,7 @@
   "modules-center": [
     "custom/time-check",
     "custom/in-a-call",
+    "custom/github-workflow-failures",
     "custom/dot-diff",
     "custom/twitch-notifications-active",
     "custom/update",
@@ -65,6 +66,16 @@
     "format": "{}",
     "on-click": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session changed",
     "on-click-right": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session all",
+    "tooltip": true,
+  },
+  "custom/github-workflow-failures": {
+    "exec": "~/.config/waybar/scripts/github-workflow-failures-waybar.sh",
+    "return-type": "json",
+    "interval": 60,
+    "signal": 12,
+    "format": "{}",
+    "on-click": "~/.local/bin/git-workflow-watch open-failed-runs",
+    "on-click-right": "~/.local/bin/git-workflow-watch clear-failed-runs",
     "tooltip": true,
   },
   "custom/twitch-notifications-active": {

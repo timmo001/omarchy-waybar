@@ -51,6 +51,7 @@
 #custom-notification-silencing-indicator,
 #custom-camera,
 #custom-microphone,
+#custom-github-workflow-failures,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-temperature,
@@ -73,6 +74,7 @@
 #custom-notification-silencing-indicator,
 #custom-camera,
 #custom-microphone,
+#custom-github-workflow-failures,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
@@ -113,9 +115,15 @@ tooltip {
 
 
 #custom-twitch-notifications-active.active,
+#custom-github-workflow-failures.workflow-failures-ok,
+#custom-github-workflow-failures.workflow-failures-unknown,
 #custom-dot-diff.dots-ok,
 #custom-dot-diff.dots-unknown {
   color: #9b9b9b;
+}
+
+#custom-github-workflow-failures.workflow-failures-attention {
+  color: #e06c75;
 }
 
 #custom-twitch-notifications-active.live {
