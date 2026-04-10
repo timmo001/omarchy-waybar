@@ -268,7 +268,7 @@
   "custom/camera": {
     "exec": "~/.config/waybar/scripts/camera-usage.sh",
     "return-type": "json",
-    "interval": 10,
+    "interval": 30,
     "format": "{}",
     "tooltip": true,
   },
@@ -281,7 +281,7 @@
   "custom/microphone": {
     "exec": "~/.config/waybar/scripts/microphone-usage.sh",
     "return-type": "json",
-    "interval": 20,
+    "interval": 32,
     "format": "{}",
     "tooltip": true,
   },
