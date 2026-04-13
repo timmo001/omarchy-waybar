@@ -10,12 +10,12 @@
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/office?more-info-entity-id=sensor.meter_d828_temperature'"
   },
   "custom/co2-alert": {
-    "exec": "~/.config/waybar/scripts/co2-alert.sh sensor.everything_presence_lite_301394_co2 'Everything Presence Lite CO2'",
+    "exec": "~/.config/waybar/scripts/co2-alert.sh sensor.meter_d828_carbon_dioxide 'Meter D828 CO2'",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
     "interval": 15,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.everything_presence_lite_301394_co2'"
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.meter_d828_carbon_dioxide'"
   },
   "custom/voc-alert": {
     "exec": "printf '{\"text\":\"\",\"class\":\"hidden\"}\\n'",
