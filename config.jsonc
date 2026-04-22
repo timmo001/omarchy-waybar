@@ -274,7 +274,7 @@
     "tooltip": true,
   },
   "custom/front-door-motion": {
-    "exec": "~/.config/waybar/scripts/front-door-motion.sh --entity input_boolean.doorbell",
+    "exec": "~/.config/waybar/scripts/front-door-motion.sh --entity input_boolean.doorbell --icon 󰂚",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
