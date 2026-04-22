@@ -34,9 +34,7 @@
 #custom-screenrecording-indicator,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
-#custom-camera,
 #custom-doorbell,
-#custom-microphone,
 #custom-heating,
 #custom-nas-activity,
 #custom-voc-alert,
@@ -99,9 +97,7 @@ tooltip {
 #custom-screenrecording-indicator,
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
-#custom-camera,
-#custom-doorbell,
-#custom-microphone {
+#custom-doorbell {
   font-size: 10px;
   padding: 0 0 1px;
 }
@@ -153,9 +149,7 @@ tooltip {
 #custom-screenrecording-indicator.active,
 #custom-idle-indicator.active,
 #custom-notification-silencing-indicator.active,
-#custom-camera.in-use,
 #custom-doorbell.active,
-#custom-microphone.in-use,
 #custom-voxtype.recording {
   color: #a55555;
 }

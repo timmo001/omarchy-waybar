@@ -21,9 +21,7 @@
     "custom/screenrecording-indicator",
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
-    "custom/camera",
-    "custom/doorbell",
-    "custom/microphone",
+    "custom/doorbell"
   ],
   "modules-right": [
     "custom/heating",
@@ -266,13 +264,6 @@
     "restart-interval": 5,
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/home/areas-048a0fd33b134e3689eda6212a41b99d?more-info-entity-id=binary_sensor.weather_station_rain_state_piezo'",
   },
-  "custom/camera": {
-    "exec": "~/.config/waybar/scripts/camera-usage.sh",
-    "return-type": "json",
-    "interval": 30,
-    "format": "{}",
-    "tooltip": true,
-  },
   "custom/doorbell": {
     "exec": "~/.config/waybar/scripts/doorbell.sh --entity input_boolean.doorbell --icon 󰂚",
     "return-type": "json",
@@ -286,13 +277,6 @@
     "exec": "$OMARCHY_PATH/default/waybar/indicators/idle.sh",
     "signal": 9,
     "return-type": "json",
-  },
-  "custom/microphone": {
-    "exec": "~/.config/waybar/scripts/microphone-usage.sh",
-    "return-type": "json",
-    "interval": 32,
-    "format": "{}",
-    "tooltip": true,
   },
   "custom/notification-silencing-indicator": {
     "on-click": "omarchy-toggle-notification-silencing",
