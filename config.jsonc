@@ -279,7 +279,7 @@
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=camera.front_door_snapshot'",
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=camera.front_door'",
   },
   "custom/idle-indicator": {
     "on-click": "omarchy-toggle-idle",
