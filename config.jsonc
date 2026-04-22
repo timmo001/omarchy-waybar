@@ -274,7 +274,7 @@
     "tooltip": true,
   },
   "custom/front-door-motion": {
-    "exec": "~/.config/waybar/scripts/front-door-motion.sh --simulate on --entity binary_sensor.front_door_motion_2",
+    "exec": "~/.config/waybar/scripts/front-door-motion.sh --entity input_boolean.doorbell",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
