@@ -78,10 +78,8 @@ regex_escape() {
   value="${value//\]/\\]}"
   value="${value//\(/\\(}"
   value="${value//\)/\\)}"
-  value="${value//\{/\\{}"
-  value="${value//\}/\\}}"
   value="${value//^/\\^}"
-  value="${value//$/\\$}"
+  value="${value//\$/\\$}"
   value="${value//|/\\|}"
   printf '%s' "$value"
 }
