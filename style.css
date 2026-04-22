@@ -35,6 +35,7 @@
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
+#custom-front-door-motion,
 #custom-microphone,
 #custom-heating,
 #custom-nas-activity,
@@ -99,6 +100,7 @@ tooltip {
 #custom-idle-indicator,
 #custom-notification-silencing-indicator,
 #custom-camera,
+#custom-front-door-motion,
 #custom-microphone {
   font-size: 10px;
   padding: 0 0 1px;
@@ -111,7 +113,8 @@ tooltip {
 
 #custom-time-check.hidden,
 #custom-in-a-call.hidden,
-#custom-github-workflow-failures.hidden {
+#custom-github-workflow-failures.hidden,
+#custom-front-door-motion.hidden {
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -151,6 +154,7 @@ tooltip {
 #custom-idle-indicator.active,
 #custom-notification-silencing-indicator.active,
 #custom-camera.in-use,
+#custom-front-door-motion.active,
 #custom-microphone.in-use,
 #custom-voxtype.recording {
   color: #a55555;
