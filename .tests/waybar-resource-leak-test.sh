@@ -41,6 +41,15 @@ style_line() {
   printf '%b%s%b\n' "$color" "$*" "$C_RESET"
 }
 
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 declare -a CATEGORIES=(
   "waybar"
   "go-automate bridge serve"
@@ -427,7 +436,8 @@ run_analysis() {
   printf -- '- CPU growth > %s%%\n' "$CPU_GROWTH_PCT"
   printf -- '- TCP connection growth > %s\n' "$TCP_CONN_GROWTH"
 
-  printf '\n%bCategory summary (first -> final, with min/max):%b\n' "${C_BOLD}${C_BLUE}" "$C_RESET"
+  style_section 'Analysis'
+  printf 'Category summary (first -> final, with min/max):\n'
 
   for category in "${CATEGORIES[@]}"; do
     first_count="${FIRST_COUNT[$category]:-0}"
@@ -498,22 +508,25 @@ main() {
   exec > >(tee "$OUTPUT_FILE") 2>&1
 
   style_line "${C_BOLD}${C_CYAN}" 'Waybar resource leak test'
+  style_section 'Configuration'
   printf 'Runtime dir: %s\n' "$RUNTIME_DIR"
   printf 'Duration: %ss\n' "$DURATION"
   printf 'Interval: %ss\n' "$INTERVAL"
   printf 'Warmup: %ss (analysis starts at sample %s/%s)\n' "$WARMUP" "$analysis_start" "$total_samples"
 
-  style_line "$C_YELLOW" 'Preparation: stopping all waybar/module/watcher processes'
+  style_section 'Preparation'
+  style_step 'Stopping all waybar/module/watcher processes'
   cleanup_waybar_processes
   sleep 1
 
-  style_line "$C_YELLOW" 'Preparation: restarting Waybar'
+  style_step 'Restarting Waybar'
   restart_waybar
   sleep 2
 
   print_process_snapshot 'After start'
 
-  style_line "$C_YELLOW" 'Sampling resources'
+  style_section 'Execution'
+  style_step 'Sampling resources'
   for ((sample = 1; sample <= total_samples; sample += 1)); do
     sample_categories
 
@@ -542,26 +555,30 @@ main() {
 
   run_analysis
 
-  style_line "$C_YELLOW" 'Post-test cleanup and restart'
+  style_section 'Cleanup'
+  style_step 'Post-test cleanup and restart'
   cleanup_waybar_processes
   sleep 1
   restart_waybar
   sleep 2
   print_process_snapshot 'After final restart'
 
+  style_section 'Result'
   if (( ${#FAIL_MESSAGES[@]} > 0 )); then
     style_line "${C_BOLD}${C_RED}" 'Result: FAIL'
     printf 'Failures:\n'
     for message in "${FAIL_MESSAGES[@]}"; do
       printf -- '- %s\n' "$message"
     done
-    printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+    style_section 'Output'
+    printf 'Output file: %s\n' "$OUTPUT_FILE"
     exit 1
   fi
 
   style_line "${C_BOLD}${C_GREEN}" 'Result: PASS'
   printf 'No CPU, RSS, process-count, or TCP-connection growth exceeded thresholds.\n'
-  printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+  style_section 'Output'
+  printf 'Output file: %s\n' "$OUTPUT_FILE"
 }
 
 main "$@"
