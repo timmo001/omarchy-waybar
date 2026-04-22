@@ -1,0 +1,41 @@
+# Waybar Benchmark Change Notes
+
+## Why these changes were needed
+
+- Interval scripts were spawning `go-automate ha bridge watch entity --waybar` repeatedly.
+- Process snapshots showed a large accumulation of watcher processes over time.
+- Machine-consumed output paths were mixed between plain text and Waybar JSON expectations.
+
+## High-priority change targets
+
+- `/home/aidan/.config/waybar/scripts/ha-waybar-module.sh`
+- `/home/aidan/.config/dotfiles/scripts/.local/bin/ha-watch-singleton`
+- `/home/aidan/.config/dotfiles/scripts/.local/bin/singleton-stream`
+
+## Required policy for future edits
+
+- Prefer `go-automate ha bridge watch entity` over `go-automate ha watch entity`.
+- Prefer `--waybar` JSON output for script/bar consumers.
+- For interval-driven scripts, prefer `ha-watch-singleton` / `singleton-stream` where feasible.
+
+## Validation checklist
+
+- Run `.benchmarks/waybar-command-bench.sh --runs 3`.
+- Run `.benchmarks/waybar-daemon-usage.sh --growth 20`.
+- Run `.tests/waybar-leak-test.sh --cycles 3`.
+- Confirm watcher count growth is stable/near-zero after restart of Waybar/user services.
+
+## Runtime flow policy
+
+- Benchmarks/tests must kill all Waybar/module/watcher processes first.
+- Benchmarks/tests must restart Waybar before measurement begins.
+- Benchmarks/tests must restart Waybar again after completion.
+
+Exception:
+
+- `.benchmarks/waybar-daemon-usage.sh` defaults to live-state mode for long-period observation.
+- Pass `--reset` when you want clean baseline mode (kill/restart before and after).
+
+## Stow note
+
+- This benchmark toolkit is stored under `.benchmarks/` so it is not included as a stow package by `dot stow`.
