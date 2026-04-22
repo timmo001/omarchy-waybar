@@ -22,6 +22,8 @@ POPUP_LOCK_FILE=""
 popup_lock_fd=""
 popup_addr=""
 close_timer_pid=""
+waybar_parent_pid=""
+waybar_parent_starttime=""
 
 usage() {
   cat <<'EOF'
@@ -146,6 +148,41 @@ require_commands() {
         POPUP_ENABLED=0
       fi
     done
+  fi
+}
+
+find_waybar_ancestor_pid() {
+  local pid="$PPID"
+  local depth=0
+  local comm=""
+  local next_pid=""
+
+  while [[ "$pid" =~ ^[0-9]+$ ]] && (( pid > 1 )) && (( depth < 8 )); do
+    comm="$(awk '{print $2}' "/proc/$pid/stat" 2>/dev/null || true)"
+    if [[ "$comm" == "(waybar)" ]]; then
+      printf '%s' "$pid"
+      return 0
+    fi
+
+    next_pid="$(awk '{print $4}' "/proc/$pid/stat" 2>/dev/null || true)"
+    if [[ ! "$next_pid" =~ ^[0-9]+$ ]] || (( next_pid <= 1 )); then
+      break
+    fi
+
+    pid="$next_pid"
+    depth=$((depth + 1))
+  done
+
+  return 1
+}
+
+capture_waybar_parent_starttime() {
+  waybar_parent_pid="$(find_waybar_ancestor_pid || printf '%s' "$PPID")"
+  waybar_parent_starttime="$(awk '{print $22}' "/proc/$waybar_parent_pid/stat" 2>/dev/null || true)"
+
+  if [[ -z "$waybar_parent_starttime" ]]; then
+    printf 'front-door-motion.sh: unable to read Waybar parent starttime\n' >&2
+    exit 1
   fi
 }
 
@@ -352,13 +389,15 @@ main() {
 
   validate_numeric_settings
   require_commands
+  capture_waybar_parent_starttime
   acquire_popup_lock
   trap cleanup EXIT INT TERM
 
   consume_stream < <(
     ~/.config/dotfiles/scripts/.local/bin/singleton-stream \
       --key "front-door-motion.${MOTION_ENTITY}" \
-      --parent-pid "$PPID" \
+      --parent-pid "$waybar_parent_pid" \
+      --parent-starttime "$waybar_parent_starttime" \
       -- go-automate ha bridge watch entity --waybar --icon '' "$MOTION_ENTITY"
   )
 }
