@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-MOTION_ENTITY="binary_sensor.front_door_motion_2"
+MOTION_ENTITY="input_boolean.doorbell"
 MOTION_ICON="󰤂"
 SIMULATE_STATE=""
 FORCE_TRUE=0
@@ -27,7 +27,7 @@ waybar_parent_starttime=""
 
 usage() {
   cat <<'EOF'
-Usage: front-door-motion.sh [options] [entity_id]
+Usage: doorbell.sh [options] [entity_id]
 
 Options:
   --entity <entity_id>           Motion entity to watch
@@ -107,7 +107,7 @@ parse_args() {
         exit 0
         ;;
       --*)
-        printf 'front-door-motion.sh: unknown option: %s\n' "$1" >&2
+        printf 'doorbell.sh: unknown option: %s\n' "$1" >&2
         usage >&2
         exit 1
         ;;
@@ -125,7 +125,7 @@ validate_numeric_settings() {
   for key in POPUP_WORKSPACE POPUP_WIDTH POPUP_HEIGHT POPUP_MARGIN POPUP_BOTTOM_MARGIN POPUP_DURATION_SECONDS; do
     value="${!key}"
     if [[ ! "$value" =~ ^[0-9]+$ ]] || (( value <= 0 )); then
-      printf 'front-door-motion.sh: %s must be a positive integer\n' "$key" >&2
+      printf 'doorbell.sh: %s must be a positive integer\n' "$key" >&2
       exit 1
     fi
   done
@@ -136,7 +136,7 @@ require_commands() {
 
   for cmd in go-automate jq flock; do
     command -v "$cmd" >/dev/null 2>&1 || {
-      printf 'front-door-motion.sh: missing command: %s\n' "$cmd" >&2
+      printf 'doorbell.sh: missing command: %s\n' "$cmd" >&2
       exit 1
     }
   done
@@ -144,7 +144,7 @@ require_commands() {
   if (( POPUP_ENABLED )); then
     for cmd in hyprctl omarchy-launch-webapp; do
       if ! command -v "$cmd" >/dev/null 2>&1; then
-        printf 'front-door-motion.sh: popup disabled (missing command: %s)\n' "$cmd" >&2
+        printf 'doorbell.sh: popup disabled (missing command: %s)\n' "$cmd" >&2
         POPUP_ENABLED=0
       fi
     done
@@ -181,17 +181,17 @@ capture_waybar_parent_starttime() {
   waybar_parent_starttime="$(awk '{print $22}' "/proc/$waybar_parent_pid/stat" 2>/dev/null || true)"
 
   if [[ -z "$waybar_parent_starttime" ]]; then
-    printf 'front-door-motion.sh: unable to read Waybar parent starttime\n' >&2
+    printf 'doorbell.sh: unable to read Waybar parent starttime\n' >&2
     exit 1
   fi
 }
 
 emit_on() {
-  printf '{"class":"active","text":"%s","tooltip":"Front Door Motion (%s): Motion detected"}\n' "$MOTION_ICON" "$MOTION_ENTITY"
+  printf '{"class":"active","text":"%s","tooltip":"Doorbell (%s): Active"}\n' "$MOTION_ICON" "$MOTION_ENTITY"
 }
 
 emit_off() {
-  printf '{"class":"hidden","text":"","tooltip":"Front Door Motion (%s): Clear"}\n' "$MOTION_ENTITY"
+  printf '{"class":"hidden","text":"","tooltip":"Doorbell (%s): Inactive"}\n' "$MOTION_ENTITY"
 }
 
 window_exists() {
@@ -301,7 +301,7 @@ acquire_popup_lock() {
     return
   fi
 
-  POPUP_LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/front-door-popup.${MOTION_ENTITY}.lock"
+  POPUP_LOCK_FILE="${XDG_RUNTIME_DIR:-/tmp}/doorbell-popup.${MOTION_ENTITY}.lock"
   exec {popup_lock_fd}>"$POPUP_LOCK_FILE"
   if ! flock -n "$popup_lock_fd"; then
     POPUP_ENABLED=0
@@ -380,7 +380,7 @@ main() {
     '')
       ;;
     *)
-      printf 'front-door-motion.sh: unsupported --simulate value: %s\n' "$SIMULATE_STATE" >&2
+      printf 'doorbell.sh: unsupported --simulate value: %s\n' "$SIMULATE_STATE" >&2
       exit 1
       ;;
   esac
@@ -395,7 +395,7 @@ main() {
 
   consume_stream < <(
     ~/.config/dotfiles/scripts/.local/bin/singleton-stream \
-      --key "front-door-motion.${MOTION_ENTITY}" \
+      --key "doorbell.${MOTION_ENTITY}" \
       --parent-pid "$waybar_parent_pid" \
       --parent-starttime "$waybar_parent_starttime" \
       -- go-automate ha bridge watch entity --waybar --icon '' "$MOTION_ENTITY"
