@@ -613,10 +613,31 @@ run_doorbell_stream() {
   local line=""
   local state=""
   local json=""
+  local stream_pid=""
+
+  cleanup_doorbell_stream() {
+    if [[ -n "$stream_pid" ]]; then
+      kill -- "-$stream_pid" 2>/dev/null || kill "$stream_pid" 2>/dev/null || true
+      wait "$stream_pid" 2>/dev/null || true
+      stream_pid=""
+    fi
+  }
 
   capture_waybar_parent_starttime
 
-  while IFS= read -r line; do
+  coproc DOORBELL_STREAM {
+    exec singleton-stream \
+      --key "$STREAM_KEY" \
+      --parent-pid "$WAYBAR_PARENT_PID" \
+      --parent-starttime "$WAYBAR_PARENT_STARTTIME" \
+      -- go-automate ha bridge watch entity --waybar --icon '' "$ENTITY_ID"
+  }
+  stream_pid="${DOORBELL_STREAM_PID:-}"
+
+  trap cleanup_doorbell_stream EXIT
+  trap 'exit 0' HUP INT TERM
+
+  while IFS= read -r line <&"${DOORBELL_STREAM[0]}"; do
     state="$(doorbell_state_from_line "$line")"
 
     if [[ "$state" == "on" ]]; then
@@ -627,13 +648,10 @@ run_doorbell_stream() {
 
     emit_if_changed "$json"
     maybe_run_trigger "$state"
-  done < <(
-    singleton-stream \
-      --key "$STREAM_KEY" \
-      --parent-pid "$WAYBAR_PARENT_PID" \
-      --parent-starttime "$WAYBAR_PARENT_STARTTIME" \
-      -- go-automate ha bridge watch entity --waybar --icon '' "$ENTITY_ID"
-  )
+  done
+
+  cleanup_doorbell_stream
+  trap - EXIT HUP INT TERM
 }
 
 run_doorbell() {
