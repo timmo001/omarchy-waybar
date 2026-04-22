@@ -96,6 +96,33 @@ list_matching() {
   pgrep -af -- "$pattern" || true
 }
 
+count_child_watchers_for_singleton() {
+  local singleton_pattern="$1"
+  local singleton_pid=""
+  local total=0
+  local children=0
+
+  while IFS= read -r singleton_pid; do
+    [[ -n "$singleton_pid" ]] || continue
+    children="$(pgrep -P "$singleton_pid" -fc '^go-automate ha bridge watch entity --waybar' || true)"
+    if [[ "$children" =~ ^[0-9]+$ ]]; then
+      total=$((total + children))
+    fi
+  done < <(pgrep -f -- "$singleton_pattern" || true)
+
+  printf '%s' "$total"
+}
+
+list_child_watchers_for_singleton() {
+  local singleton_pattern="$1"
+  local singleton_pid=""
+
+  while IFS= read -r singleton_pid; do
+    [[ -n "$singleton_pid" ]] || continue
+    pgrep -P "$singleton_pid" -af '^go-automate ha bridge watch entity --waybar' || true
+  done < <(pgrep -f -- "$singleton_pattern" || true)
+}
+
 cleanup_waybar_processes() {
   pkill -x waybar >/dev/null 2>&1 || true
   pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
@@ -133,18 +160,14 @@ stop_case_process() {
 
 print_case_snapshot() {
   local label="$1"
-  local module_pattern="$2"
-  local singleton_pattern="$3"
-  local watcher_pattern="$4"
+  local singleton_pattern="$2"
 
   printf '\n-- %s --\n' "$label"
-  printf 'ha-watch-singleton: %s\n' "$(count_matching "$module_pattern")"
   printf 'singleton-stream: %s\n' "$(count_matching "$singleton_pattern")"
-  printf 'bridge-watchers: %s\n' "$(count_matching "$watcher_pattern")"
+  printf 'bridge-watchers: %s\n' "$(count_child_watchers_for_singleton "$singleton_pattern")"
   printf 'details:\n'
-  list_matching "$module_pattern"
   list_matching "$singleton_pattern"
-  list_matching "$watcher_pattern"
+  list_child_watchers_for_singleton "$singleton_pattern"
 }
 
 run_case() {
@@ -153,13 +176,9 @@ run_case() {
   local entity="$3"
   shift 3
 
-  local module_re
   local key
   local key_re
-  local entity_re
-  local module_pattern
   local singleton_pattern
-  local watcher_pattern
 
   local module_pid=""
   local singleton_count=0
@@ -175,14 +194,10 @@ run_case() {
   local sample=0
   local status="PASS"
 
-  module_re="$(regex_escape "$module")"
-  entity_re="$(regex_escape "$entity")"
   key="ha-watch.${module}.${entity}"
   key_re="$(regex_escape "$key")"
 
-  module_pattern="ha-watch-singleton --module ${module_re} --entity ${entity_re}"
   singleton_pattern="singleton-stream --key ${key_re}"
-  watcher_pattern="go-automate ha bridge watch entity --waybar.* ${entity_re}$"
 
   printf '\n== Case: %s ==\n' "$name"
   printf 'module: %s\n' "$module"
@@ -192,11 +207,11 @@ run_case() {
   module_pid="$!"
 
   sleep "$STARTUP_DELAY"
-  print_case_snapshot 'After start' "$module_pattern" "$singleton_pattern" "$watcher_pattern"
+  print_case_snapshot 'After start' "$singleton_pattern"
 
   for ((sample = 1; sample <= SAMPLES; sample += 1)); do
     singleton_count="$(count_matching "$singleton_pattern")"
-    watcher_count="$(count_matching "$watcher_pattern")"
+    watcher_count="$(count_child_watchers_for_singleton "$singleton_pattern")"
 
     if (( first_singleton < 0 )); then
       first_singleton="$singleton_count"
@@ -227,14 +242,14 @@ run_case() {
 
   for ((sample = 1; sample <= SHUTDOWN_WAIT; sample += 1)); do
     end_singleton="$(count_matching "$singleton_pattern")"
-    end_watcher="$(count_matching "$watcher_pattern")"
+    end_watcher="$(count_child_watchers_for_singleton "$singleton_pattern")"
     if (( end_singleton == 0 && end_watcher == 0 )); then
       break
     fi
     sleep 1
   done
 
-  print_case_snapshot 'After stop' "$module_pattern" "$singleton_pattern" "$watcher_pattern"
+  print_case_snapshot 'After stop' "$singleton_pattern"
 
   if (( first_singleton == 0 )); then
     status="FAIL"
@@ -264,6 +279,9 @@ run_case() {
   printf '\nPreparation: stopping all waybar/module/watcher processes\n'
   cleanup_waybar_processes
   sleep 1
+  printf 'Preparation: restarting Waybar before isolation cases\n'
+  restart_waybar
+  sleep 2
 
   run_case 'Time Check' 'isolation.time-check' 'input_boolean.time_check' \
     --text-on 'Check the time' \
