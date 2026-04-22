@@ -274,7 +274,7 @@
     "tooltip": true,
   },
   "custom/front-door-motion": {
-    "exec": "~/.config/waybar/scripts/front-door-motion.sh binary_sensor.front_door_motion_2",
+    "exec": "~/.config/dotfiles/scripts/.local/bin/front-door-motion-waybar --entity binary_sensor.front_door_motion_2",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
