@@ -1,0 +1,13 @@
+{
+  "include": ["~/.config/waybar/config.desktop.jsonc"],
+  "modules-left": [
+    "custom/omarchy"
+  ],
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "battery",
+    "clock"
+  ]
+}
