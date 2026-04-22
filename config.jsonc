@@ -201,7 +201,7 @@
     "return-type": "json",
   },
   "custom/in-a-call": {
-    "exec": "go-automate ha bridge watch entity --waybar --icon  --tooltip-on 'In a Call (input_boolean.in_a_call): On' --tooltip-off 'In a Call (input_boolean.in_a_call): Off' --class-on active --class-off inactive --hide-off input_boolean.in_a_call",
+    "exec": "ha-watch-singleton --module in-a-call --entity input_boolean.in_a_call --icon  --tooltip-on 'In a Call (input_boolean.in_a_call): On' --tooltip-off 'In a Call (input_boolean.in_a_call): Off' --class-on active --class-off inactive --hide-off",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -218,7 +218,7 @@
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/network?more-info-entity-id=sensor.nas_activity'",
   },
   "custom/time-check": {
-    "exec": "go-automate ha bridge watch entity --waybar --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Time Check (input_boolean.time_check): On' --tooltip-off 'Time Check (input_boolean.time_check): Off' --class-on active --class-off inactive --hide-off input_boolean.time_check",
+    "exec": "ha-watch-singleton --module time-check --entity input_boolean.time_check --icon 󱑎 --text-on 'Check the time' --tooltip-on 'Time Check (input_boolean.time_check): On' --tooltip-off 'Time Check (input_boolean.time_check): Off' --class-on active --class-off inactive --hide-off",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -235,7 +235,7 @@
     "on-click": "launch-work-browser --tab 'https://calendar.google.com/calendar/u/0/r?pli=1'",
   },
   "custom/heating": {
-    "exec": "go-automate ha bridge watch entity --waybar --icon 󰈸 --tooltip-on 'Thermostat Status (sensor.thermostat_status)' sensor.thermostat_status",
+    "exec": "ha-watch-singleton --module heating --entity sensor.thermostat_status --icon 󰈸 --tooltip-on 'Thermostat Status (sensor.thermostat_status)'",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -259,7 +259,7 @@
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/environment?more-info-entity-id=sensor.apollo_air_1_806d64_sen55_voc'",
   },
   "custom/rain": {
-    "exec": "go-automate ha bridge watch entity --waybar --icon 󰖖 --tooltip-on 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Raining' --tooltip-off 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Not raining' --class-on raining --class-off hidden --hide-off binary_sensor.weather_station_rain_state_piezo",
+    "exec": "ha-watch-singleton --module rain --entity binary_sensor.weather_station_rain_state_piezo --icon 󰖖 --tooltip-on 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Raining' --tooltip-off 'Weather Station Rain State Piezo (binary_sensor.weather_station_rain_state_piezo): Not raining' --class-on raining --class-off hidden --hide-off",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
@@ -274,7 +274,7 @@
     "tooltip": true,
   },
   "custom/front-door-motion": {
-    "exec": "~/.config/waybar/scripts/front-door-motion.sh --entity binary_sensor.front_door_motion_2",
+    "exec": "~/.config/waybar/scripts/front-door-motion.sh --simulate on --entity binary_sensor.front_door_motion_2",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
