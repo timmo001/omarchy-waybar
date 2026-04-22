@@ -7,6 +7,39 @@ growth_seconds=0
 output_file=""
 reset_environment=0
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_RED=$'\033[31m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_RED=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 usage() {
   cat <<'EOF'
 Usage: waybar-daemon-usage.sh [--sample SECONDS] [--growth SECONDS] [--output PATH] [--reset]
@@ -213,6 +246,8 @@ run_snapshot() {
     fi
   done <<< "$ps_lines"
 
+  style_line "${C_BOLD}${C_CYAN}" 'Waybar daemon usage benchmark'
+  style_section 'Execution'
   printf 'CPU sample window: %.1fs\n' "$sample_seconds"
   printf 'CATEGORY\tCOUNT\tCPU%%_SUM\tRSS_MB_SUM\tTCP_CONNS\tTCP_RX_MB\tTCP_TX_MB\n'
 
@@ -253,24 +288,35 @@ run_snapshot() {
 }
 
 {
+  style_section 'Configuration'
+  printf 'Sample window seconds: %s\n' "$sample_seconds"
+  printf 'Growth window seconds: %s\n' "$growth_seconds"
+  printf 'Reset mode: %s\n' "$reset_environment"
+
+  style_section 'Preparation'
   if (( reset_environment )); then
-    printf 'Preparation: stopping Waybar and related watcher/module processes\n'
+    style_step 'Stopping Waybar and related watcher/module processes'
     cleanup_waybar_processes
-    printf 'Preparation: restarting Waybar before measurement\n'
+    style_step 'Restarting Waybar before measurement'
     restart_waybar
     sleep 2
   else
-    printf 'Preparation: using current live Waybar state (no reset)\n'
+    style_step 'Using current live Waybar state (no reset)'
   fi
   run_snapshot
 } | tee "$output_file"
 
 if (( reset_environment )); then
+  style_section 'Cleanup'
+  style_step 'Restarting Waybar after benchmark'
   restart_waybar
 fi
-printf '\nSaved benchmark output: %s\n' "$output_file" | tee -a "$output_file"
+style_section 'Result'
+style_line "$C_GREEN" 'Result: completed daemon usage benchmark' | tee -a "$output_file"
+style_section 'Output'
+printf 'Output file: %s\n' "$output_file" | tee -a "$output_file"
 if (( reset_environment )); then
-  printf 'Post-run: Waybar restart requested\n' | tee -a "$output_file"
+  style_line "$C_GREEN" 'Post-run: Waybar restart requested' | tee -a "$output_file"
 else
-  printf 'Post-run: no restart (live-state mode)\n' | tee -a "$output_file"
+  style_line "$C_GREEN" 'Post-run: no restart (live-state mode)' | tee -a "$output_file"
 fi

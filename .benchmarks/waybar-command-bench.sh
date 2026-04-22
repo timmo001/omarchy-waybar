@@ -9,6 +9,37 @@ OUTPUT_FILE=""
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/output"
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 usage() {
   cat <<'EOF'
 Usage: waybar-command-bench.sh [options]
@@ -181,11 +212,19 @@ add_command "ha-watch-singleton rain_state" "ha-watch-singleton --module bench.r
 header="COMMAND\tRUNS\tMEDIAN_SEC\tP95_SEC\tMEDIAN_PEAK_RSS_KB\tTIMEOUTS\tNONZERO\tEXPECTS_TIMEOUT"
 rows=("$header")
 
-printf 'Preparation: stopping Waybar and related watcher/module processes\n'
+style_line "${C_BOLD}${C_CYAN}" 'Waybar command benchmark'
+style_section 'Configuration'
+printf 'Runs per command: %s\n' "$RUNS"
+printf 'Include stream commands: %s\n' "$INCLUDE_STREAM"
+
+style_section 'Preparation'
+style_step 'Stopping Waybar and related watcher/module processes'
 cleanup_waybar_processes
-printf 'Preparation: restarting Waybar before command benchmark\n'
+style_step 'Restarting Waybar before command benchmark'
 restart_waybar
 sleep 2
+
+style_section 'Execution'
 
 for i in "${!NAMES[@]}"; do
   if [[ "${EXPECTS_TIMEOUT[$i]}" == "true" && "$INCLUDE_STREAM" != "1" ]]; then
@@ -235,7 +274,14 @@ for row in "${rows[@]}"; do
 done
 
 printf '%s\n' "${rows[@]}" > "$OUTPUT_FILE"
-printf '\nSaved benchmark output: %s\n' "$OUTPUT_FILE"
+
+style_section 'Cleanup'
+style_step 'Restarting Waybar after benchmark'
 
 restart_waybar
-printf 'Post-run: Waybar restart requested\n'
+
+style_section 'Result'
+style_line "$C_GREEN" 'Result: completed command benchmark'
+
+style_section 'Output'
+printf 'Output file: %s\n' "$OUTPUT_FILE"

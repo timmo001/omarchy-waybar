@@ -17,6 +17,30 @@ COUNT_GROWTH=1
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/output"
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_RED=$'\033[31m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_RED=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
 declare -a CATEGORIES=(
   "waybar"
   "go-automate bridge serve"
@@ -191,7 +215,7 @@ restart_waybar() {
 print_process_snapshot() {
   local label="$1"
 
-  printf '\n== %s ==\n' "$label"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
   printf 'waybar: %s\n' "$(count_waybar)"
   printf 'ha-waybar-module: %s\n' "$(count_waybar_modules)"
   printf 'singleton-stream: %s\n' "$(count_singleton)"
@@ -403,7 +427,7 @@ run_analysis() {
   printf -- '- CPU growth > %s%%\n' "$CPU_GROWTH_PCT"
   printf -- '- TCP connection growth > %s\n' "$TCP_CONN_GROWTH"
 
-  printf '\nCategory summary (first -> final, with min/max):\n'
+  printf '\n%bCategory summary (first -> final, with min/max):%b\n' "${C_BOLD}${C_BLUE}" "$C_RESET"
 
   for category in "${CATEGORIES[@]}"; do
     first_count="${FIRST_COUNT[$category]:-0}"
@@ -473,23 +497,23 @@ main() {
 
   exec > >(tee "$OUTPUT_FILE") 2>&1
 
-  printf 'Waybar resource leak test\n'
+  style_line "${C_BOLD}${C_CYAN}" 'Waybar resource leak test'
   printf 'Runtime dir: %s\n' "$RUNTIME_DIR"
   printf 'Duration: %ss\n' "$DURATION"
   printf 'Interval: %ss\n' "$INTERVAL"
   printf 'Warmup: %ss (analysis starts at sample %s/%s)\n' "$WARMUP" "$analysis_start" "$total_samples"
 
-  printf '\nPreparation: stopping all waybar/module/watcher processes\n'
+  style_line "$C_YELLOW" 'Preparation: stopping all waybar/module/watcher processes'
   cleanup_waybar_processes
   sleep 1
 
-  printf 'Preparation: restarting Waybar\n'
+  style_line "$C_YELLOW" 'Preparation: restarting Waybar'
   restart_waybar
   sleep 2
 
   print_process_snapshot 'After start'
 
-  printf '\nSampling resources\n'
+  style_line "$C_YELLOW" 'Sampling resources'
   for ((sample = 1; sample <= total_samples; sample += 1)); do
     sample_categories
 
@@ -518,7 +542,7 @@ main() {
 
   run_analysis
 
-  printf '\nPost-test cleanup and restart\n'
+  style_line "$C_YELLOW" 'Post-test cleanup and restart'
   cleanup_waybar_processes
   sleep 1
   restart_waybar
@@ -526,7 +550,7 @@ main() {
   print_process_snapshot 'After final restart'
 
   if (( ${#FAIL_MESSAGES[@]} > 0 )); then
-    printf '\nResult: FAIL\n'
+    style_line "${C_BOLD}${C_RED}" 'Result: FAIL'
     printf 'Failures:\n'
     for message in "${FAIL_MESSAGES[@]}"; do
       printf -- '- %s\n' "$message"
@@ -535,7 +559,7 @@ main() {
     exit 1
   fi
 
-  printf '\nResult: PASS\n'
+  style_line "${C_BOLD}${C_GREEN}" 'Result: PASS'
   printf 'No CPU, RSS, process-count, or TCP-connection growth exceeded thresholds.\n'
   printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
 }

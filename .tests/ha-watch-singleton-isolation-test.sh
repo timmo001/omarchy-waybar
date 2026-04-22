@@ -13,6 +13,39 @@ FAILURES=0
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/output"
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_RED=$'\033[31m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_RED=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 usage() {
   cat <<'EOF'
 Usage: ha-watch-singleton-isolation-test.sh [options]
@@ -160,7 +193,7 @@ print_case_snapshot() {
   local label="$1"
   local singleton_pattern="$2"
 
-  printf '\n-- %s --\n' "$label"
+  printf '\n%b-- %s --%b\n' "$C_CYAN" "$label" "$C_RESET"
   printf 'singleton-stream: %s\n' "$(count_matching "$singleton_pattern")"
   printf 'bridge-watchers: %s\n' "$(count_child_watchers_for_singleton "$singleton_pattern")"
   printf 'details:\n'
@@ -197,7 +230,7 @@ run_case() {
 
   singleton_pattern="singleton-stream --key ${key_re}"
 
-  printf '\n== Case: %s ==\n' "$name"
+  style_section "Case: $name"
   printf 'module: %s\n' "$module"
   printf 'entity: %s\n' "$entity"
 
@@ -232,7 +265,7 @@ run_case() {
       max_watcher="$watcher_count"
     fi
 
-    printf 'sample %02d/%02d: singleton=%s bridge-watchers=%s\n' "$sample" "$SAMPLES" "$singleton_count" "$watcher_count"
+    printf '%bsample %02d/%02d:%b singleton=%s bridge-watchers=%s\n' "$C_BLUE" "$sample" "$SAMPLES" "$C_RESET" "$singleton_count" "$watcher_count"
     sleep "$INTERVAL"
   done
 
@@ -261,7 +294,11 @@ run_case() {
 
   printf 'summary singleton: first=%s min=%s max=%s end=%s\n' "$first_singleton" "$min_singleton" "$max_singleton" "$end_singleton"
   printf 'summary watchers : first=%s min=%s max=%s end=%s\n' "$first_watcher" "$min_watcher" "$max_watcher" "$end_watcher"
-  printf 'result: %s\n' "$status"
+  if [[ "$status" == "PASS" ]]; then
+    style_line "$C_GREEN" "result: $status"
+  else
+    style_line "$C_RED" "result: $status"
+  fi
 
   if [[ "$status" != "PASS" ]]; then
     FAILURES=$((FAILURES + 1))
@@ -269,17 +306,21 @@ run_case() {
 }
 
 {
-  printf 'HA watch singleton isolation test\n'
+  style_line "${C_BOLD}${C_CYAN}" 'HA watch singleton isolation test'
+  style_section 'Configuration'
   printf 'Runtime dir: %s\n' "$RUNTIME_DIR"
   printf 'Samples: %s\n' "$SAMPLES"
   printf 'Interval: %ss\n' "$INTERVAL"
 
-  printf '\nPreparation: stopping all waybar/module/watcher processes\n'
+  style_section 'Preparation'
+  style_step 'Stopping all waybar/module/watcher processes'
   cleanup_waybar_processes
   sleep 1
-  printf 'Preparation: restarting Waybar before isolation cases\n'
+  style_step 'Restarting Waybar before isolation cases'
   restart_waybar
   sleep 2
+
+  style_section 'Execution'
 
   run_case 'Time Check' 'isolation.time-check' 'input_boolean.time_check' \
     --text-on 'Check the time' \
@@ -299,18 +340,21 @@ run_case() {
     --class-off hidden \
     --hide-off
 
-  printf '\nPost-test cleanup and restart\n'
+  style_section 'Cleanup'
+  style_step 'Post-test cleanup and restart'
   cleanup_waybar_processes
   sleep 1
   restart_waybar
   sleep 2
 
+  style_section 'Result'
   if (( FAILURES > 0 )); then
-    printf '\nResult: FAIL (%s failing case(s))\n' "$FAILURES"
+    style_line "${C_BOLD}${C_RED}" "Result: FAIL ($FAILURES failing case(s))"
     exit 1
   fi
 
-  printf '\nResult: PASS (all cases stable)\n'
+  style_line "${C_BOLD}${C_GREEN}" 'Result: PASS (all cases stable)'
 } | tee "$OUTPUT_FILE"
 
-printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+style_section 'Output'
+printf 'Output file: %s\n' "$OUTPUT_FILE"

@@ -10,6 +10,39 @@ SAMPLE_DELAY="0.25"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/output"
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_RED=$'\033[31m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_RED=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 usage() {
   cat <<'EOF'
 Usage: waybar-process-snapshot.sh [options]
@@ -185,10 +218,12 @@ main() {
     direct_watcher_count
   ))
 
-  printf 'Waybar process snapshot\n'
+  style_line "${C_BOLD}${C_CYAN}" 'Waybar process snapshot'
+  style_section 'Configuration'
   printf 'Generated: %s\n' "$(date -Iseconds)"
   printf 'Sample window: %ss (%s samples)\n' "$(awk -v a="$SAMPLE_ATTEMPTS" -v d="$SAMPLE_DELAY" 'BEGIN { printf "%.2f", a * d }')" "$SAMPLE_ATTEMPTS"
-  printf '\nSummary\n'
+
+  style_section 'Summary'
   printf -- '- Waybar bar process [waybar]: %s\n' "$waybar_count"
   printf -- '- Module helper scripts [ha-waybar-module]: %s\n' "$module_count"
   printf -- '- Shared stream workers [singleton-stream]: %s\n' "$singleton_count"
@@ -196,33 +231,40 @@ main() {
   printf -- '- Direct watcher children [direct-watchers]: %s\n' "$direct_watcher_count"
   printf -- '- Launcher wrappers [ha-watch-singleton]: %s (usually 0 after exec)\n' "$singleton_wrapper_count"
 
-  printf '\nProcess details\n'
+  style_section 'Process details'
   list_relevant_processes
 
   if (( EXPECT_STOPPED )); then
+    style_section 'Result'
     if (( total_active == 0 )); then
-      printf '\nResult: PASS (no Waybar-related processes running)\n'
+      style_line "${C_BOLD}${C_GREEN}" 'Result: PASS (no Waybar-related processes running)'
     elif (( waybar_count == 0 && helper_active > 0 )); then
-      printf '\nResult: FAIL (Waybar is stopped but %s helper process(es) are still running)\n' "$helper_active"
+      printf '%bResult: FAIL%b (Waybar is stopped but %s helper process(es) are still running)\n' "$C_RED" "$C_RESET" "$helper_active"
       printf 'Tip: kill leftovers with `pkill -f "singleton-stream --key"` and `pkill -f "go-automate ha bridge watch entity --waybar"`.\n'
-      printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+      style_section 'Output'
+      printf 'Output file: %s\n' "$OUTPUT_FILE"
       exit 1
     else
-      printf '\nResult: FAIL (%s Waybar-related process(es) still running)\n' "$total_active"
+      printf '%bResult: FAIL%b (%s Waybar-related process(es) still running)\n' "$C_RED" "$C_RESET" "$total_active"
       printf 'Tip: run `omarchy-toggle-waybar` or `pkill -x waybar` before this check.\n'
-      printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+      style_section 'Output'
+      printf 'Output file: %s\n' "$OUTPUT_FILE"
       exit 1
     fi
   elif (( waybar_count == 0 && helper_active > 0 )); then
-    printf '\nResult: WARNING (Waybar is not running but %s helper process(es) are still running)\n' "$helper_active"
+    style_section 'Result'
+    printf '%bResult: WARNING%b (Waybar is not running but %s helper process(es) are still running)\n' "$C_YELLOW" "$C_RESET" "$helper_active"
     printf 'Tip: kill leftovers with `pkill -f "singleton-stream --key"` and `pkill -f "go-automate ha bridge watch entity --waybar"`.\n'
-    printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+    style_section 'Output'
+    printf 'Output file: %s\n' "$OUTPUT_FILE"
     exit 1
   else
-    printf '\nResult: snapshot complete\n'
+    style_section 'Result'
+    style_line "$C_GREEN" 'Result: snapshot complete'
   fi
 
-  printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+  style_section 'Output'
+  printf 'Output file: %s\n' "$OUTPUT_FILE"
 }
 
 main "$@"

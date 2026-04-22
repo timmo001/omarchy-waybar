@@ -9,6 +9,39 @@ CYCLES=3
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUTPUT_DIR="$SCRIPT_DIR/output"
 
+C_RESET=$'\033[0m'
+C_BOLD=$'\033[1m'
+C_RED=$'\033[31m'
+C_GREEN=$'\033[32m'
+C_YELLOW=$'\033[33m'
+C_BLUE=$'\033[34m'
+C_CYAN=$'\033[36m'
+
+if [[ -n "${NO_COLOR:-}" ]]; then
+  C_RESET=''
+  C_BOLD=''
+  C_RED=''
+  C_GREEN=''
+  C_YELLOW=''
+  C_BLUE=''
+  C_CYAN=''
+fi
+
+style_line() {
+  local color="$1"
+  shift
+  printf '%b%s%b\n' "$color" "$*" "$C_RESET"
+}
+
+style_section() {
+  local label="$1"
+  printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
+}
+
+style_step() {
+  style_line "$C_YELLOW" "$1"
+}
+
 usage() {
   cat <<'EOF'
 Usage: waybar-leak-test.sh [options]
@@ -95,7 +128,7 @@ restart_waybar() {
 print_snapshot() {
   local label="$1"
 
-  printf '\n== %s ==\n' "$label"
+  style_section "$label"
   printf 'waybar: %s\n' "$(count_waybar)"
   printf 'ha-waybar-module: %s\n' "$(count_waybar_modules)"
   printf 'singleton-stream: %s\n' "$(count_singleton)"
@@ -105,16 +138,19 @@ print_snapshot() {
 }
 
 {
-  printf 'Waybar full leak test\n'
+  style_line "${C_BOLD}${C_CYAN}" 'Waybar full leak test'
+  style_section 'Configuration'
   printf 'Runtime dir: %s\n' "$RUNTIME_DIR"
   printf 'Restart cycles: %s\n' "$CYCLES"
 
-  printf '\nPreparation: stopping all waybar/module/watcher processes\n'
+  style_section 'Preparation'
+  style_step 'Stopping all waybar/module/watcher processes'
   cleanup_waybar_processes
   sleep 1
   print_snapshot 'After cleanup'
 
-  printf '\nStarting Waybar\n'
+  style_section 'Execution'
+  style_step 'Starting Waybar'
   restart_waybar
   sleep 2
   print_snapshot 'After first start'
@@ -127,24 +163,27 @@ print_snapshot() {
   done
   print_snapshot 'After restart cycles'
 
-  printf '\nToggling Waybar off\n'
+  style_step 'Toggling Waybar off'
   omarchy-toggle-waybar
   sleep 2
   print_snapshot 'After toggle off'
 
-  printf '\nToggling Waybar on\n'
+  style_step 'Toggling Waybar on'
   omarchy-toggle-waybar
   sleep 2
   print_snapshot 'After toggle on'
 
-  printf '\nPost-test cleanup and restart\n'
+  style_section 'Cleanup'
+  style_step 'Post-test cleanup and restart'
   cleanup_waybar_processes
   sleep 1
   restart_waybar
   sleep 2
   print_snapshot 'After final restart'
 
-  printf '\nResult: completed full leak test sequence\n'
+  style_section 'Result'
+  style_line "${C_BOLD}${C_GREEN}" 'Result: completed full leak test sequence'
 } | tee "$OUTPUT_FILE"
 
-printf '\nSaved test output: %s\n' "$OUTPUT_FILE"
+style_section 'Output'
+printf 'Output file: %s\n' "$OUTPUT_FILE"
