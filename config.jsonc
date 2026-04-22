@@ -22,7 +22,7 @@
     "custom/idle-indicator",
     "custom/notification-silencing-indicator",
     "custom/camera",
-    "custom/front-door-motion",
+    "custom/doorbell",
     "custom/microphone",
   ],
   "modules-right": [
@@ -273,8 +273,8 @@
     "format": "{}",
     "tooltip": true,
   },
-  "custom/front-door-motion": {
-    "exec": "~/.config/waybar/scripts/front-door-motion.sh --entity input_boolean.doorbell --icon 󰂚",
+  "custom/doorbell": {
+    "exec": "~/.config/waybar/scripts/doorbell.sh --entity input_boolean.doorbell --icon 󰂚",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
