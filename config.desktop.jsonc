@@ -25,11 +25,11 @@
     "interval": 3600
   },
   "custom/doorbell": {
-    "exec": "~/.config/waybar/scripts/ha-waybar-module.sh doorbell --entity input_boolean.doorbell --icon 󰂚 --stream-key doorbell.input_boolean.doorbell --trigger-state on --trigger-command '~/.config/dotfiles/scripts/.local/bin/doorbell-popup --open-only --no-auto-close --monitor DP-1' --trigger-on transition --trigger-initial false --trigger-cooldown 2 --trigger-key doorbell.popup.input_boolean.doorbell",
+    "exec": "~/.config/waybar/scripts/ha-waybar-module.sh doorbell --entity input_boolean.doorbell --icon 󰂚 --stream-key doorbell.input_boolean.doorbell --trigger-state on --trigger-command '~/.config/dotfiles/scripts/.local/bin/doorbell-popup --open-only --no-auto-close --camera-entity camera.front_door_snapshot --monitor DP-1' --trigger-on transition --trigger-initial false --trigger-cooldown 2 --trigger-key doorbell.popup.input_boolean.doorbell",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,
     "restart-interval": 5,
-    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=camera.front_door'"
+    "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=camera.front_door_snapshot'"
   }
 }
