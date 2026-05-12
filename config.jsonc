@@ -65,8 +65,8 @@
     "interval": 60,
     "signal": 11,
     "format": "{}",
-    "on-click": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session changed",
-    "on-click-right": "~/.config/dotfiles/scripts/.local/bin/dot-diff-tmux-session all",
+    "on-click": "uwsm app -- xdg-terminal-exec dot-tui",
+    "on-click-right": "uwsm app -- xdg-terminal-exec dot-tui",
     "tooltip": true,
   },
   "custom/github-workflow-failures": {
