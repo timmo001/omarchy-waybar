@@ -65,8 +65,8 @@
     "interval": 60,
     "signal": 11,
     "format": "{}",
-    "on-click": "uwsm app -- xdg-terminal-exec --app-id=TUI.float -e dot-tui",
-    "on-click-right": "uwsm app -- xdg-terminal-exec --app-id=TUI.float -e dot-tui --tab other",
+    "on-click": "uwsm app -- xdg-terminal-exec --app-id=TUI.float -e dot tui diff",
+    "on-click-right": "uwsm app -- xdg-terminal-exec --app-id=TUI.float -e dot tui diff --tab other",
     "tooltip": true,
   },
   "custom/github-workflow-failures": {
