@@ -194,7 +194,7 @@ add_command() {
 }
 
 add_command "dot-diff-waybar" "~/.config/waybar/scripts/dot-diff-waybar.sh" 10 false
-add_command "github-workflow-failures-waybar" "~/.config/waybar/scripts/github-workflow-failures-waybar.sh" 10 false
+add_command "github-workflows-waybar" "~/.config/waybar/scripts/github-workflows-waybar.sh" 10 false
 add_command "twitch-notifications status" "twitch-notifications --status-waybar --max-chars 60" 10 false
 add_command "ha-waybar-module temperature" "~/.config/waybar/scripts/ha-waybar-module.sh temperature --entity sensor.meter_plus_378b_temperature --name 'Meter Plus Temperature'" 10 false
 add_command "ha-waybar-module nas-activity" "~/.config/waybar/scripts/ha-waybar-module.sh nas-activity --entity sensor.nas_activity --name 'NAS Activity' --switch-entity switch.nas --inactive-script-entity script.turn_off_nas_when_inactive" 10 false

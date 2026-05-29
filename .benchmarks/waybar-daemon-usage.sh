@@ -127,8 +127,8 @@ category_for_cmd() {
     printf 'omarchy-voxtype-status'
   elif [[ "$cmd" == *"dot-diff-waybar.sh"* ]]; then
     printf 'dot-diff-waybar'
-  elif [[ "$cmd" == *"github-workflow-failures-waybar.sh"* ]]; then
-    printf 'github-workflow-failures-waybar'
+  elif [[ "$cmd" == *"github-workflows-waybar.sh"* ]]; then
+    printf 'github-workflows-waybar'
   elif [[ "$cmd" == *"ha-waybar-module.sh"* ]]; then
     printf 'ha-waybar-module'
   else

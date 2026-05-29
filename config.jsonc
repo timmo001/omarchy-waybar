@@ -13,7 +13,7 @@
     "custom/time-check",
     "custom/in-a-call",
     "custom/nas-activity",
-    "custom/github-workflow-failures",
+    "custom/github-workflows",
     "custom/dot-diff",
     "custom/twitch-notifications-active",
     "custom/update",
@@ -69,14 +69,14 @@
     "on-click-right": "uwsm app -- xdg-terminal-exec --app-id=TUI.float -e dot tui diff --tab other",
     "tooltip": true,
   },
-  "custom/github-workflow-failures": {
-    "exec": "~/.config/waybar/scripts/github-workflow-failures-waybar.sh",
+  "custom/github-workflows": {
+    "exec": "~/.config/waybar/scripts/github-workflows-waybar.sh",
     "return-type": "json",
     "interval": 60,
     "signal": 12,
     "format": "{}",
-    "on-click": "~/.local/bin/git-workflow-watch open-failed-runs",
-    "on-click-right": "~/.local/bin/git-workflow-watch clear-failed-runs",
+    "on-click": "~/.config/waybar/scripts/github-workflows-waybar.sh open",
+    "on-click-right": "~/.config/waybar/scripts/github-workflows-waybar.sh refresh",
     "tooltip": true,
   },
   "custom/twitch-notifications-active": {

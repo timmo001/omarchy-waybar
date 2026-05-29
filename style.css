@@ -26,7 +26,7 @@
 #custom-current-next-event,
 #custom-time-check,
 #custom-in-a-call,
-#custom-github-workflow-failures,
+#custom-github-workflows,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
@@ -89,7 +89,7 @@ tooltip {
 /* Center */
 #custom-time-check,
 #custom-in-a-call,
-#custom-github-workflow-failures,
+#custom-github-workflows,
 #custom-dot-diff,
 #custom-twitch-notifications-active,
 #custom-update,
@@ -109,7 +109,7 @@ tooltip {
 
 #custom-time-check.hidden,
 #custom-in-a-call.hidden,
-#custom-github-workflow-failures.hidden,
+#custom-github-workflows.hidden,
 #custom-doorbell.hidden {
   min-width: 0;
   margin: 0;
@@ -121,16 +121,20 @@ tooltip {
   color: #2bb3b1;
 }
 
-#custom-github-workflow-failures.workflow-failures-ok,
-#custom-github-workflow-failures.workflow-failures-unknown,
+#custom-github-workflows.workflows-ok,
+#custom-github-workflows.workflows-unknown,
 #custom-dot-diff.dots-ok,
 #custom-dot-diff.dots-unknown,
 #custom-twitch-notifications-active.active {
   color: #9b9b9b;
 }
 
-#custom-github-workflow-failures.workflow-failures-attention {
+#custom-github-workflows.workflows-attention {
   color: #e06c75;
+}
+
+#custom-github-workflows.workflows-running {
+  color: #e5c07b;
 }
 
 #custom-dot-diff.dots-attention {
