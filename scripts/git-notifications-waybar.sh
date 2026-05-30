@@ -8,6 +8,7 @@ CACHE_FILE="$CACHE_DIR/git-notifications-waybar.json"
 LOCK_DIR="$CACHE_DIR/git-notifications-waybar.lock"
 REFRESH_SIGNAL="${WAYBAR_GIT_NOTIFICATIONS_SIGNAL:-13}"
 REFRESH_TIMEOUT="${WAYBAR_GIT_NOTIFICATIONS_TIMEOUT:-30}"
+REFRESH_MIN_AGE="${WAYBAR_GIT_NOTIFICATIONS_MIN_REFRESH_AGE:-30}"
 
 loading_json='{"text":" ..","tooltip":"GitHub notifications: loading","class":"notifications-unknown"}'
 error_json='{"text":" ?","tooltip":"GitHub notifications: unavailable","class":"notifications-unknown"}'
@@ -20,6 +21,15 @@ signal_waybar_refresh() {
 
 open_notifications() {
   uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" git-notifications >/dev/null 2>&1 &
+}
+
+cache_needs_refresh() {
+  [[ -s "$CACHE_FILE" ]] || return 0
+
+  local cache_mtime now
+  cache_mtime="$(stat -c %Y "$CACHE_FILE" 2>/dev/null || printf '0')"
+  now="$(date +%s)"
+  ((now - cache_mtime >= REFRESH_MIN_AGE))
 }
 
 refresh_cache() {
@@ -47,9 +57,9 @@ case "${1:-status}" in
     ;;
   status)
     if [[ "${WAYBAR_GIT_NOTIFICATIONS_REFRESH_DETACHED:-0}" != "1" ]]; then
-      if mkdir "$LOCK_DIR" 2>/dev/null; then
+      if cache_needs_refresh && mkdir "$LOCK_DIR" 2>/dev/null; then
         export WAYBAR_GIT_NOTIFICATIONS_REFRESH_DETACHED=1
-        setsid "$0" refresh >/dev/null 2>&1 &
+        setsid "$0" >/dev/null 2>&1 &
       fi
 
       if [[ -s "$CACHE_FILE" ]]; then
