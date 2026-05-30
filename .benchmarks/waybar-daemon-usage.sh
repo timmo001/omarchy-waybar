@@ -125,10 +125,10 @@ category_for_cmd() {
     printf 'twitch-notifications'
   elif [[ "$cmd" == *"omarchy-voxtype-status"* ]]; then
     printf 'omarchy-voxtype-status'
-  elif [[ "$cmd" == *"dot-diff-waybar.sh"* ]]; then
-    printf 'dot-diff-waybar'
-  elif [[ "$cmd" == *"github-workflows-waybar.sh"* ]]; then
-    printf 'github-workflows-waybar'
+  elif [[ "$cmd" == *"git-diff-waybar.sh"* ]]; then
+    printf 'git-diff-waybar'
+  elif [[ "$cmd" == *"git-workflows-waybar.sh"* ]]; then
+    printf 'git-workflows-waybar'
   elif [[ "$cmd" == *"ha-waybar-module.sh"* ]]; then
     printf 'ha-waybar-module'
   else

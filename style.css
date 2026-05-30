@@ -26,8 +26,8 @@
 #custom-current-next-event,
 #custom-time-check,
 #custom-in-a-call,
-#custom-github-workflows,
-#custom-dot-diff,
+#custom-git-workflows,
+#custom-git-diff,
 #custom-twitch-notifications-active,
 #custom-update,
 #custom-voxtype,
@@ -89,8 +89,8 @@ tooltip {
 /* Center */
 #custom-time-check,
 #custom-in-a-call,
-#custom-github-workflows,
-#custom-dot-diff,
+#custom-git-workflows,
+#custom-git-diff,
 #custom-twitch-notifications-active,
 #custom-update,
 #custom-voxtype,
@@ -109,7 +109,7 @@ tooltip {
 
 #custom-time-check.hidden,
 #custom-in-a-call.hidden,
-#custom-github-workflows.hidden,
+#custom-git-workflows.hidden,
 #custom-doorbell.hidden {
   min-width: 0;
   margin: 0;
@@ -121,31 +121,31 @@ tooltip {
   color: #2bb3b1;
 }
 
-#custom-github-workflows.workflows-ok,
-#custom-github-workflows.workflows-unknown,
-#custom-dot-diff.dots-ok,
-#custom-dot-diff.dots-unknown,
+#custom-git-workflows.workflows-ok,
+#custom-git-workflows.workflows-unknown,
+#custom-git-diff.dots-ok,
+#custom-git-diff.dots-unknown,
 #custom-twitch-notifications-active.active {
   color: #9b9b9b;
 }
 
-#custom-github-workflows.workflows-attention {
+#custom-git-workflows.workflows-attention {
   color: #e06c75;
 }
 
-#custom-github-workflows.workflows-running {
+#custom-git-workflows.workflows-running {
   color: #e5c07b;
 }
 
-#custom-dot-diff.dots-attention {
+#custom-git-diff.dots-attention {
   color: #e5c07b;
 }
 
-#custom-dot-diff.dots-pull-only {
+#custom-git-diff.dots-pull-only {
   color: #98c379;
 }
 
-#custom-dot-diff.dots-extra-only {
+#custom-git-diff.dots-extra-only {
   color: #61afef;
 }
 

@@ -4,10 +4,10 @@ set -euo pipefail
 
 DOT_BIN="${DOT_BIN:-$HOME/.config/dotfiles/scripts/.local/bin/dot}"
 CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar"
-CACHE_FILE="$CACHE_DIR/github-workflows-waybar.json"
-LOCK_DIR="$CACHE_DIR/github-workflows-waybar.lock"
-REFRESH_SIGNAL="${WAYBAR_GITHUB_WORKFLOWS_SIGNAL:-12}"
-REFRESH_TIMEOUT="${WAYBAR_GITHUB_WORKFLOWS_TIMEOUT:-45}"
+CACHE_FILE="$CACHE_DIR/git-workflows-waybar.json"
+LOCK_DIR="$CACHE_DIR/git-workflows-waybar.lock"
+REFRESH_SIGNAL="${WAYBAR_GIT_WORKFLOWS_SIGNAL:-12}"
+REFRESH_TIMEOUT="${WAYBAR_GIT_WORKFLOWS_TIMEOUT:-45}"
 
 loading_json='{"text":"● ..","tooltip":"GitHub workflows: loading","class":"workflows-unknown"}'
 error_json='{"text":" ?","tooltip":"GitHub workflows: unavailable","class":"workflows-unknown"}'
@@ -25,14 +25,14 @@ signal_waybar_refresh() {
 open_workflows() {
   local since
   since="$(since_last_hour)"
-  uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" workflows --since "$since" >/dev/null 2>&1 &
+  uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" git-workflows --since "$since" >/dev/null 2>&1 &
 }
 
 refresh_cache() {
   local since status_json rendered_json tmp_file
   since="$(since_last_hour)"
 
-  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" workflows --waybar --since "$since" 2>/dev/null || true)"
+  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-workflows --waybar --since "$since" 2>/dev/null || true)"
   if [[ -z "$status_json" ]]; then
     rendered_json="$error_json"
   else
@@ -53,9 +53,9 @@ case "${1:-status}" in
     refresh_cache
     ;;
   status)
-    if [[ "${WAYBAR_GITHUB_WORKFLOWS_REFRESH_DETACHED:-0}" != "1" ]]; then
+    if [[ "${WAYBAR_GIT_WORKFLOWS_REFRESH_DETACHED:-0}" != "1" ]]; then
       if mkdir "$LOCK_DIR" 2>/dev/null; then
-        export WAYBAR_GITHUB_WORKFLOWS_REFRESH_DETACHED=1
+        export WAYBAR_GIT_WORKFLOWS_REFRESH_DETACHED=1
         setsid "$0" refresh >/dev/null 2>&1 &
       fi
 
