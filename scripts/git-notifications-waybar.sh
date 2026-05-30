@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Single-line JSON for Waybar - authenticated GitHub notification inbox.
+set -euo pipefail
+
+DOT_BIN="${DOT_BIN:-$HOME/.config/dotfiles/scripts/.local/bin/dot}"
+CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar"
+CACHE_FILE="$CACHE_DIR/git-notifications-waybar.json"
+LOCK_DIR="$CACHE_DIR/git-notifications-waybar.lock"
+REFRESH_SIGNAL="${WAYBAR_GIT_NOTIFICATIONS_SIGNAL:-13}"
+REFRESH_TIMEOUT="${WAYBAR_GIT_NOTIFICATIONS_TIMEOUT:-30}"
+
+loading_json='{"text":" ..","tooltip":"GitHub notifications: loading","class":"notifications-unknown"}'
+error_json='{"text":" ?","tooltip":"GitHub notifications: unavailable","class":"notifications-unknown"}'
+
+mkdir -p "$CACHE_DIR"
+
+signal_waybar_refresh() {
+  pkill -RTMIN+${REFRESH_SIGNAL} -x waybar >/dev/null 2>&1 || true
+}
+
+open_notifications() {
+  uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" git-notifications >/dev/null 2>&1 &
+}
+
+refresh_cache() {
+  local status_json rendered_json tmp_file
+
+  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-notifications --waybar 2>/dev/null || true)"
+  if [[ -z "$status_json" ]]; then
+    rendered_json="$error_json"
+  else
+    rendered_json="$status_json"
+  fi
+
+  tmp_file="$CACHE_FILE.tmp"
+  printf '%s\n' "$rendered_json" > "$tmp_file"
+  mv "$tmp_file" "$CACHE_FILE"
+  signal_waybar_refresh
+}
+
+case "${1:-status}" in
+  open)
+    open_notifications
+    ;;
+  refresh)
+    refresh_cache
+    ;;
+  status)
+    if [[ "${WAYBAR_GIT_NOTIFICATIONS_REFRESH_DETACHED:-0}" != "1" ]]; then
+      if mkdir "$LOCK_DIR" 2>/dev/null; then
+        export WAYBAR_GIT_NOTIFICATIONS_REFRESH_DETACHED=1
+        setsid "$0" refresh >/dev/null 2>&1 &
+      fi
+
+      if [[ -s "$CACHE_FILE" ]]; then
+        cat "$CACHE_FILE"
+      else
+        printf '%s\n' "$loading_json"
+      fi
+      exit 0
+    fi
+    trap 'rmdir "$LOCK_DIR" 2>/dev/null || true' EXIT
+    refresh_cache
+    ;;
+  *)
+    printf 'Usage: %s [status|refresh|open]\n' "${0##*/}" >&2
+    exit 1
+    ;;
+esac
