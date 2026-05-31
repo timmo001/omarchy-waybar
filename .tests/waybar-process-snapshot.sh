@@ -104,9 +104,9 @@ classify_process() {
     printf 'singleton-stream | stream-worker'
   elif [[ "$cmd" == *'ha-watch-singleton --module'* ]]; then
     printf 'ha-watch-singleton | launcher'
-  elif [[ "$cmd" == go-automate\ ha\ bridge\ watch\ entity\ --waybar* ]]; then
+  elif [[ "$cmd" == go-automate\ ha\ bridge\ watch\ entity\ --bar-json* ]]; then
     printf 'bridge-watchers | bridge-watcher'
-  elif [[ "$cmd" == go-automate\ ha\ watch\ entity\ --waybar* ]]; then
+  elif [[ "$cmd" == go-automate\ ha\ watch\ entity\ --bar-json* ]]; then
     printf 'direct-watchers | direct-watcher'
   else
     printf 'other'
@@ -145,12 +145,12 @@ collect_counts() {
       singleton_wrapper_count="$current"
     fi
 
-    current="$(count_matching '^go-automate ha bridge watch entity --waybar')"
+    current="$(count_matching '^go-automate ha bridge watch entity --bar-json')"
     if (( current > bridge_watcher_count )); then
       bridge_watcher_count="$current"
     fi
 
-    current="$(count_matching '^go-automate ha watch entity --waybar')"
+    current="$(count_matching '^go-automate ha watch entity --bar-json')"
     if (( current > direct_watcher_count )); then
       direct_watcher_count="$current"
     fi
@@ -168,7 +168,7 @@ list_relevant_processes() {
   local cmd=""
   local kind=""
 
-  lines="$(pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|^go-automate ha bridge watch entity --waybar|^go-automate ha watch entity --waybar)' || true)"
+  lines="$(pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|^go-automate ha bridge watch entity --bar-json|^go-automate ha watch entity --bar-json)' || true)"
 
   if [[ -z "$lines" ]]; then
     printf '(none)\n'
@@ -240,7 +240,7 @@ main() {
       style_line "${C_BOLD}${C_GREEN}" 'Result: PASS (no Waybar-related processes running)'
     elif (( waybar_count == 0 && helper_active > 0 )); then
       printf '%bResult: FAIL%b (Waybar is stopped but %s helper process(es) are still running)\n' "$C_RED" "$C_RESET" "$helper_active"
-      printf 'Tip: kill leftovers with `pkill -f "singleton-stream --key"` and `pkill -f "go-automate ha bridge watch entity --waybar"`.\n'
+      printf 'Tip: kill leftovers with `pkill -f "[s]ingleton-stream --key"` and `pkill -f "[g]o-automate ha bridge watch entity --bar-json"`.\n'
       style_section 'Output'
       printf 'Output file: %s\n' "$OUTPUT_FILE"
       exit 1
@@ -254,7 +254,7 @@ main() {
   elif (( waybar_count == 0 && helper_active > 0 )); then
     style_section 'Result'
     printf '%bResult: WARNING%b (Waybar is not running but %s helper process(es) are still running)\n' "$C_YELLOW" "$C_RESET" "$helper_active"
-    printf 'Tip: kill leftovers with `pkill -f "singleton-stream --key"` and `pkill -f "go-automate ha bridge watch entity --waybar"`.\n'
+    printf 'Tip: kill leftovers with `pkill -f "[s]ingleton-stream --key"` and `pkill -f "[g]o-automate ha bridge watch entity --bar-json"`.\n'
     style_section 'Output'
     printf 'Output file: %s\n' "$OUTPUT_FILE"
     exit 1

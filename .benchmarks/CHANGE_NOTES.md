@@ -2,7 +2,7 @@
 
 ## Why these changes were needed
 
-- Interval scripts were spawning `go-automate ha bridge watch entity --waybar` repeatedly.
+- Interval scripts were spawning `go-automate ha bridge watch entity --bar-json` repeatedly.
 - Process snapshots showed a large accumulation of watcher processes over time.
 - Machine-consumed output paths were mixed between plain text and Waybar JSON expectations.
 
@@ -15,7 +15,7 @@
 ## Required policy for future edits
 
 - Prefer `go-automate ha bridge watch entity` over `go-automate ha watch entity`.
-- Prefer `--waybar` JSON output for script/bar consumers.
+- Prefer `--bar-json` JSON output for script/bar consumers.
 - For interval-driven scripts, prefer `ha-watch-singleton` / `singleton-stream` where feasible.
 
 ## Validation checklist

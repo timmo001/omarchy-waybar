@@ -189,7 +189,7 @@ count_waybar() {
 }
 
 count_watchers() {
-  pgrep -fc '^go-automate ha bridge watch entity --waybar' || true
+  pgrep -fc '^go-automate ha bridge watch entity --bar-json' || true
 }
 
 count_singleton() {
@@ -201,7 +201,7 @@ count_waybar_modules() {
 }
 
 list_relevant_processes() {
-  pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge serve|go-automate ha bridge watch entity --waybar|go-automate ha watch entity --waybar)' || true
+  pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge serve|go-automate ha bridge watch entity --bar-json|go-automate ha watch entity --bar-json)' || true
 }
 
 cleanup_waybar_processes() {
@@ -209,8 +209,8 @@ cleanup_waybar_processes() {
   pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha bridge watch entity --waybar' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha watch entity --waybar' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha watch entity --bar-json' >/dev/null 2>&1 || true
 
   rm -f "$RUNTIME_DIR"/singleton-stream-*.lock >/dev/null 2>&1 || true
   rm -f "$RUNTIME_DIR"/singleton-stream-*.state >/dev/null 2>&1 || true
@@ -242,7 +242,7 @@ category_for_cmd() {
     printf 'go-automate bridge serve'
   elif [[ "$cmd" == *'singleton-stream --key'* ]]; then
     printf 'singleton-stream'
-  elif [[ "$cmd" == *'go-automate ha bridge watch entity --waybar'* ]]; then
+  elif [[ "$cmd" == *'go-automate ha bridge watch entity --bar-json'* ]]; then
     printf 'go-automate bridge watch'
   elif [[ "$cmd" == *'ha-waybar-module.sh'* ]]; then
     printf 'ha-waybar-module'

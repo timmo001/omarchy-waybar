@@ -32,7 +32,7 @@ refresh_cache() {
   local since status_json rendered_json tmp_file
   since="$(since_last_hour)"
 
-  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-workflows --waybar --since "$since" 2>/dev/null || true)"
+  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-workflows --bar-json --since "$since" 2>/dev/null || true)"
   if [[ -z "$status_json" ]]; then
     rendered_json="$error_json"
   else

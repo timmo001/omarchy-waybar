@@ -135,7 +135,7 @@ count_child_watchers_for_singleton() {
 
   while IFS= read -r singleton_pid; do
     [[ -n "$singleton_pid" ]] || continue
-    children="$(pgrep -P "$singleton_pid" -fc '^go-automate ha bridge watch entity --waybar' || true)"
+    children="$(pgrep -P "$singleton_pid" -fc '^go-automate ha bridge watch entity --bar-json' || true)"
     if [[ "$children" =~ ^[0-9]+$ ]]; then
       total=$((total + children))
     fi
@@ -150,7 +150,7 @@ list_child_watchers_for_singleton() {
 
   while IFS= read -r singleton_pid; do
     [[ -n "$singleton_pid" ]] || continue
-    pgrep -P "$singleton_pid" -af '^go-automate ha bridge watch entity --waybar' || true
+    pgrep -P "$singleton_pid" -af '^go-automate ha bridge watch entity --bar-json' || true
   done < <(pgrep -f -- "$singleton_pattern" || true)
 }
 
@@ -159,8 +159,8 @@ cleanup_waybar_processes() {
   pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha bridge watch entity --waybar' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha watch entity --waybar' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha watch entity --bar-json' >/dev/null 2>&1 || true
 
   rm -f "$RUNTIME_DIR"/singleton-stream-*.lock >/dev/null 2>&1 || true
   rm -f "$RUNTIME_DIR"/singleton-stream-*.state >/dev/null 2>&1 || true

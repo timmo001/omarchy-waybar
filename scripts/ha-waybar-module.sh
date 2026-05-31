@@ -281,7 +281,7 @@ read_entity_line() {
   local watch_pid=""
 
   coproc ENTITY_WATCH {
-    exec go-automate ha bridge watch entity --waybar --icon '' "$watch_entity_id" 2>/dev/null
+    exec go-automate ha bridge watch entity --bar-json --icon '' "$watch_entity_id" 2>/dev/null
   }
 
   watch_pid="${ENTITY_WATCH_PID:-}"
@@ -630,7 +630,7 @@ run_doorbell_stream() {
       --key "$STREAM_KEY" \
       --parent-pid "$WAYBAR_PARENT_PID" \
       --parent-starttime "$WAYBAR_PARENT_STARTTIME" \
-      -- go-automate ha bridge watch entity --waybar --icon '' "$ENTITY_ID"
+      -- go-automate ha bridge watch entity --bar-json --icon '' "$ENTITY_ID"
   }
   stream_pid="${DOORBELL_STREAM_PID:-}"
 

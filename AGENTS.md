@@ -6,7 +6,7 @@ Instructions for agents editing this Waybar config.
 
 - Use `go-automate ha bridge watch entity` for Waybar watcher scripts by default.
 - Do not introduce `go-automate ha watch entity` direct watchers unless bridge mode is unavailable and explicitly required.
-- For machine-consumed module output, prefer `--waybar` JSON output.
+- For machine-consumed module output, prefer `--bar-json` JSON output.
 - If a watcher emits plain text intentionally, document why in the script.
 
 ## Script Safety

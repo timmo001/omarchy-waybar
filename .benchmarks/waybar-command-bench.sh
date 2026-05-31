@@ -94,8 +94,8 @@ cleanup_waybar_processes() {
   pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha bridge watch entity --waybar' >/dev/null 2>&1 || true
-  pkill -f 'go-automate ha watch entity --waybar' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
+  pkill -f '[g]o-automate ha watch entity --bar-json' >/dev/null 2>&1 || true
   sleep 1
 }
 
@@ -195,7 +195,7 @@ add_command() {
 
 add_command "git-diff-waybar" "~/.config/waybar/scripts/git-diff-waybar.sh" 10 false
 add_command "git-workflows-waybar" "~/.config/waybar/scripts/git-workflows-waybar.sh" 10 false
-add_command "twitch-notifications status" "twitch-notifications --status-waybar --max-chars 60" 10 false
+add_command "twitch-notifications status" "twitch-notifications --status-bar-json --max-chars 60" 10 false
 add_command "ha-waybar-module temperature" "~/.config/waybar/scripts/ha-waybar-module.sh temperature --entity sensor.meter_plus_378b_temperature --name 'Meter Plus Temperature'" 10 false
 add_command "ha-waybar-module nas-activity" "~/.config/waybar/scripts/ha-waybar-module.sh nas-activity --entity sensor.nas_activity --name 'NAS Activity' --switch-entity switch.nas --inactive-script-entity script.turn_off_nas_when_inactive" 10 false
 add_command "ha-waybar-module current-next-event" "~/.config/waybar/scripts/ha-waybar-module.sh current-next-event --entity input_text.current_next_event_in_an_hour" 10 false

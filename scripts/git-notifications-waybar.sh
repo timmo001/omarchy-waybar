@@ -35,7 +35,7 @@ cache_needs_refresh() {
 refresh_cache() {
   local status_json rendered_json tmp_file
 
-  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-notifications --waybar 2>/dev/null || true)"
+  status_json="$(timeout "$REFRESH_TIMEOUT" "$DOT_BIN" git-notifications --bar-json 2>/dev/null || true)"
   if [[ -z "$status_json" ]]; then
     rendered_json="$error_json"
   else
