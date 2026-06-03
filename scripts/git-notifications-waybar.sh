@@ -20,7 +20,7 @@ signal_waybar_refresh() {
 }
 
 open_notifications() {
-  uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" git-notifications >/dev/null 2>&1 &
+  uwsm app -- xdg-terminal-exec --app-id=TUI.float -e "$DOT_BIN" git-notifications --bar-filter >/dev/null 2>&1 &
 }
 
 cache_needs_refresh() {
