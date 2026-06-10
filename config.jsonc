@@ -242,7 +242,7 @@
     "on-click": "launch-work-browser --tab 'https://calendar.google.com/calendar/u/0/r?pli=1'",
   },
   "custom/heating": {
-    "exec": "ha-watch-singleton --module heating --entity sensor.thermostat_status --icon 󰈸 --tooltip-on 'Thermostat Status (sensor.thermostat_status)'",
+    "exec": "ha-watch-singleton --module heating --entity sensor.thermostat_status --icon 󰈸 --tooltip-on 'Thermostat Status (sensor.thermostat_status)' --class-on heating --class-off hidden --hide-off",
     "return-type": "json",
     "format": "{}",
     "tooltip": true,

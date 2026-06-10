@@ -55,6 +55,9 @@ tooltip {
 }
 
 .hidden {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
   opacity: 0;
 }
 
@@ -198,7 +201,6 @@ tooltip {
   color: #2bb3b1;
 }
 
-#custom-heating.idle,
 #custom-voc-alert.hidden,
 #custom-co2-alert.hidden,
 #custom-rain.hidden {
