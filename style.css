@@ -201,6 +201,7 @@ tooltip {
   color: #2bb3b1;
 }
 
+#custom-heating.hidden,
 #custom-voc-alert.hidden,
 #custom-co2-alert.hidden,
 #custom-rain.hidden {
