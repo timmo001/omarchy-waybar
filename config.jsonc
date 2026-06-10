@@ -14,7 +14,6 @@
     "custom/in-a-call",
     "custom/nas-activity",
     "custom/git-notifications",
-    "custom/git-workflows",
     "custom/git-diff",
     "custom/twitch-notifications-active",
     "custom/update",
@@ -80,16 +79,7 @@
     "on-click-right": "~/.config/waybar/scripts/git-notifications-waybar.sh refresh",
     "tooltip": true,
   },
-  "custom/git-workflows": {
-    "exec": "~/.config/waybar/scripts/git-workflows-waybar.sh",
-    "return-type": "json",
-    "interval": 60,
-    "signal": 12,
-    "format": "{}",
-    "on-click": "~/.config/waybar/scripts/git-workflows-waybar.sh open",
-    "on-click-right": "~/.config/waybar/scripts/git-workflows-waybar.sh refresh",
-    "tooltip": true,
-  },
+
   "custom/twitch-notifications-active": {
     "exec": "twitch-notifications --status-bar-json --max-chars 60",
     "return-type": "json",
