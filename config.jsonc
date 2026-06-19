@@ -92,7 +92,7 @@
   "custom/temperature": {
     "exec": "~/.config/waybar/scripts/ha-waybar-module.sh temperature --entity sensor.meter_plus_378b_temperature --name 'Meter Plus Temperature'",
     "return-type": "json",
-    "format": " {} °C",
+    "format": "󱕭 {} °C",
     "tooltip": true,
     "interval": 15,
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/living-room?more-info-entity-id=sensor.meter_plus_378b_temperature'",
