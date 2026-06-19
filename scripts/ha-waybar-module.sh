@@ -10,6 +10,8 @@ QUALITY_ENTITY=""
 VALUE_ENTITY=""
 SWITCH_ENTITY=""
 INACTIVE_SCRIPT_ENTITY=""
+GATE_ENTITY=""
+GATE_BELOW=""
 SIMULATE_STATE=""
 FORCE_TRUE=0
 FAKE_STATE=""
@@ -35,6 +37,7 @@ Modes:
   co2-alert
   voc-alert
   nas-activity
+  dining-temperature
   current-next-event
   doorbell
 
@@ -49,6 +52,9 @@ Mode options:
   --value-entity <id>            VOC numeric entity (voc-alert)
   --switch-entity <id>           Gate switch entity (nas-activity)
   --inactive-script-entity <id>  Inactive script entity (nas-activity)
+  --gate-entity <id>             Gate number entity (dining-temperature)
+  --gate-below <number>          Show only when gate entity is below this
+                                 value (dining-temperature, default: 25)
   --simulate <on|off>            Emit simulated state and exit (doorbell)
   --force-true                   Force simulated on and exit (doorbell)
   --fake-state <warning|critical> Emit fake warning/critical output
@@ -75,145 +81,159 @@ sanitize_key() {
 
 set_mode_defaults() {
   case "$MODE" in
-    temperature)
-      ENTITY_ID="sensor.meter_plus_378b_temperature"
-      ENTITY_NAME="Meter Plus Temperature"
-      ;;
-    co2-alert)
-      ENTITY_ID="sensor.apollo_air_1_806d64_co2"
-      ENTITY_NAME="Apollo Air 1 CO2"
-      FAKE_STATE="${WAYBAR_FAKE_CO2_ALERT:-}"
-      ;;
-    voc-alert)
-      QUALITY_ENTITY="sensor.apollo_air_1_806d64_voc_quality"
-      VALUE_ENTITY="sensor.apollo_air_1_806d64_sen55_voc"
-      ENTITY_NAME="Apollo Air 1 VOC"
-      FAKE_STATE="${WAYBAR_FAKE_VOC_ALERT:-}"
-      ;;
-    nas-activity)
-      ENTITY_ID="sensor.nas_activity"
-      ENTITY_NAME="NAS Activity"
-      SWITCH_ENTITY="switch.nas"
-      INACTIVE_SCRIPT_ENTITY="script.turn_off_nas_when_inactive"
-      ;;
-    current-next-event)
-      ENTITY_ID="input_text.current_next_event_in_an_hour"
-      ;;
-    doorbell)
-      ENTITY_ID="input_boolean.doorbell"
-      ICON="D"
-      ;;
-    *)
-      printf 'ha-waybar-module: unsupported mode: %s\n' "$MODE" >&2
-      usage >&2
-      exit 1
-      ;;
+  temperature)
+    ENTITY_ID="sensor.meter_plus_378b_temperature"
+    ENTITY_NAME="Meter Plus Temperature"
+    ;;
+  co2-alert)
+    ENTITY_ID="sensor.apollo_air_1_806d64_co2"
+    ENTITY_NAME="Apollo Air 1 CO2"
+    FAKE_STATE="${WAYBAR_FAKE_CO2_ALERT:-}"
+    ;;
+  voc-alert)
+    QUALITY_ENTITY="sensor.apollo_air_1_806d64_voc_quality"
+    VALUE_ENTITY="sensor.apollo_air_1_806d64_sen55_voc"
+    ENTITY_NAME="Apollo Air 1 VOC"
+    FAKE_STATE="${WAYBAR_FAKE_VOC_ALERT:-}"
+    ;;
+  nas-activity)
+    ENTITY_ID="sensor.nas_activity"
+    ENTITY_NAME="NAS Activity"
+    SWITCH_ENTITY="switch.nas"
+    INACTIVE_SCRIPT_ENTITY="script.turn_off_nas_when_inactive"
+    ;;
+  dining-temperature)
+    ENTITY_ID="sensor.meter_plus_433c_temperature"
+    ENTITY_NAME="Dining Room Temperature"
+    GATE_ENTITY="input_number.living_room_air_conditioner_target_temperature"
+    GATE_BELOW="25"
+    ;;
+  current-next-event)
+    ENTITY_ID="input_text.current_next_event_in_an_hour"
+    ;;
+  doorbell)
+    ENTITY_ID="input_boolean.doorbell"
+    ICON="D"
+    ;;
+  *)
+    printf 'ha-waybar-module: unsupported mode: %s\n' "$MODE" >&2
+    usage >&2
+    exit 1
+    ;;
   esac
 }
 
 parse_bool_flag() {
   case "$1" in
-    true|1|yes|on)
-      printf '1'
-      ;;
-    false|0|no|off)
-      printf '0'
-      ;;
-    *)
-      return 1
-      ;;
+  true | 1 | yes | on)
+    printf '1'
+    ;;
+  false | 0 | no | off)
+    printf '0'
+    ;;
+  *)
+    return 1
+    ;;
   esac
 }
 
 parse_args() {
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --entity)
-        ENTITY_ID="$2"
-        shift 2
-        ;;
-      --name)
-        ENTITY_NAME="$2"
-        shift 2
-        ;;
-      --icon)
-        ICON="$2"
-        shift 2
-        ;;
-      --quality-entity)
-        QUALITY_ENTITY="$2"
-        shift 2
-        ;;
-      --value-entity)
-        VALUE_ENTITY="$2"
-        shift 2
-        ;;
-      --switch-entity)
-        SWITCH_ENTITY="$2"
-        shift 2
-        ;;
-      --inactive-script-entity)
-        INACTIVE_SCRIPT_ENTITY="$2"
-        shift 2
-        ;;
-      --simulate)
-        SIMULATE_STATE="$2"
-        shift 2
-        ;;
-      --force-true)
-        FORCE_TRUE=1
-        shift
-        ;;
-      --fake-state)
-        FAKE_STATE="$2"
-        shift 2
-        ;;
-      --stream-key)
-        STREAM_KEY="$2"
-        shift 2
-        ;;
-      --trigger-state)
-        TRIGGER_STATE="$2"
-        shift 2
-        ;;
-      --trigger-command)
-        TRIGGER_COMMAND="$2"
-        shift 2
-        ;;
-      --trigger-on)
-        TRIGGER_ON="$2"
-        shift 2
-        ;;
-      --trigger-initial)
-        TRIGGER_INITIAL="$(parse_bool_flag "$2" || true)"
-        if [[ -z "$TRIGGER_INITIAL" ]]; then
-          printf 'ha-waybar-module: --trigger-initial must be true or false\n' >&2
-          exit 1
-        fi
-        shift 2
-        ;;
-      --trigger-cooldown)
-        TRIGGER_COOLDOWN="$2"
-        shift 2
-        ;;
-      --trigger-key)
-        TRIGGER_KEY="$2"
-        shift 2
-        ;;
-      --help|-h)
-        usage
-        exit 0
-        ;;
-      --*)
-        printf 'ha-waybar-module: unknown option: %s\n' "$1" >&2
-        usage >&2
+    --entity)
+      ENTITY_ID="$2"
+      shift 2
+      ;;
+    --name)
+      ENTITY_NAME="$2"
+      shift 2
+      ;;
+    --icon)
+      ICON="$2"
+      shift 2
+      ;;
+    --quality-entity)
+      QUALITY_ENTITY="$2"
+      shift 2
+      ;;
+    --value-entity)
+      VALUE_ENTITY="$2"
+      shift 2
+      ;;
+    --switch-entity)
+      SWITCH_ENTITY="$2"
+      shift 2
+      ;;
+    --inactive-script-entity)
+      INACTIVE_SCRIPT_ENTITY="$2"
+      shift 2
+      ;;
+    --gate-entity)
+      GATE_ENTITY="$2"
+      shift 2
+      ;;
+    --gate-below)
+      GATE_BELOW="$2"
+      shift 2
+      ;;
+    --simulate)
+      SIMULATE_STATE="$2"
+      shift 2
+      ;;
+    --force-true)
+      FORCE_TRUE=1
+      shift
+      ;;
+    --fake-state)
+      FAKE_STATE="$2"
+      shift 2
+      ;;
+    --stream-key)
+      STREAM_KEY="$2"
+      shift 2
+      ;;
+    --trigger-state)
+      TRIGGER_STATE="$2"
+      shift 2
+      ;;
+    --trigger-command)
+      TRIGGER_COMMAND="$2"
+      shift 2
+      ;;
+    --trigger-on)
+      TRIGGER_ON="$2"
+      shift 2
+      ;;
+    --trigger-initial)
+      TRIGGER_INITIAL="$(parse_bool_flag "$2" || true)"
+      if [[ -z "$TRIGGER_INITIAL" ]]; then
+        printf 'ha-waybar-module: --trigger-initial must be true or false\n' >&2
         exit 1
-        ;;
-      *)
-        printf 'ha-waybar-module: unexpected argument: %s\n' "$1" >&2
-        usage >&2
-        exit 1
-        ;;
+      fi
+      shift 2
+      ;;
+    --trigger-cooldown)
+      TRIGGER_COOLDOWN="$2"
+      shift 2
+      ;;
+    --trigger-key)
+      TRIGGER_KEY="$2"
+      shift 2
+      ;;
+    --help | -h)
+      usage
+      exit 0
+      ;;
+    --*)
+      printf 'ha-waybar-module: unknown option: %s\n' "$1" >&2
+      usage >&2
+      exit 1
+      ;;
+    *)
+      printf 'ha-waybar-module: unexpected argument: %s\n' "$1" >&2
+      usage >&2
+      exit 1
+      ;;
     esac
   done
 }
@@ -230,17 +250,27 @@ validate_args() {
   fi
 
   case "$TRIGGER_ON" in
-    transition|match)
-      ;;
-    *)
-      printf 'ha-waybar-module: --trigger-on must be transition or match\n' >&2
-      exit 1
-      ;;
+  transition | match)
+    ;;
+  *)
+    printf 'ha-waybar-module: --trigger-on must be transition or match\n' >&2
+    exit 1
+    ;;
   esac
 
   if [[ ! "$TRIGGER_COOLDOWN" =~ ^[0-9]+$ ]]; then
     printf 'ha-waybar-module: --trigger-cooldown must be a non-negative integer\n' >&2
     exit 1
+  fi
+
+  if [[ "$MODE" == "dining-temperature" ]]; then
+    if [[ -z "$GATE_BELOW" ]]; then
+      GATE_BELOW="25"
+    fi
+    if [[ ! "$GATE_BELOW" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+      printf 'ha-waybar-module: --gate-below must be a number\n' >&2
+      exit 1
+    fi
   fi
 
   if [[ -z "$TRIGGER_KEY" ]]; then
@@ -327,7 +357,7 @@ trigger_cooldown_file() {
 
 run_trigger_command() {
   [[ -n "$TRIGGER_COMMAND" ]] || return
-  nohup setsid bash -lc "$TRIGGER_COMMAND" >/dev/null 2>&1 < /dev/null &
+  nohup setsid bash -lc "$TRIGGER_COMMAND" >/dev/null 2>&1 </dev/null &
 }
 
 maybe_run_trigger() {
@@ -347,43 +377,43 @@ maybe_run_trigger() {
   cooldown_file="$(trigger_cooldown_file)"
 
   if [[ -f "$state_file" ]]; then
-    previous_state="$(< "$state_file")"
+    previous_state="$(<"$state_file")"
   fi
 
-  if (( TRIGGER_INITIAL == 0 )) && [[ ! -f "$state_file" ]]; then
-    printf '%s\n' "$current_state" > "$state_file"
+  if ((TRIGGER_INITIAL == 0)) && [[ ! -f "$state_file" ]]; then
+    printf '%s\n' "$current_state" >"$state_file"
     return
   fi
 
   case "$TRIGGER_ON" in
-    transition)
-      if [[ "$previous_state" != "$TRIGGER_STATE" && "$current_state" == "$TRIGGER_STATE" ]]; then
-        should_fire=1
-      fi
-      ;;
-    match)
-      if [[ "$current_state" == "$TRIGGER_STATE" ]]; then
-        should_fire=1
-      fi
-      ;;
+  transition)
+    if [[ "$previous_state" != "$TRIGGER_STATE" && "$current_state" == "$TRIGGER_STATE" ]]; then
+      should_fire=1
+    fi
+    ;;
+  match)
+    if [[ "$current_state" == "$TRIGGER_STATE" ]]; then
+      should_fire=1
+    fi
+    ;;
   esac
 
-  printf '%s\n' "$current_state" > "$state_file"
+  printf '%s\n' "$current_state" >"$state_file"
 
-  if (( should_fire )) && (( TRIGGER_COOLDOWN > 0 )); then
+  if ((should_fire)) && ((TRIGGER_COOLDOWN > 0)); then
     now="$(date +%s)"
     if [[ -f "$cooldown_file" ]]; then
-      last="$(< "$cooldown_file")"
+      last="$(<"$cooldown_file")"
     fi
 
-    if [[ "$last" =~ ^[0-9]+$ ]] && (( now - last < TRIGGER_COOLDOWN )); then
+    if [[ "$last" =~ ^[0-9]+$ ]] && ((now - last < TRIGGER_COOLDOWN)); then
       should_fire=0
     else
-      printf '%s\n' "$now" > "$cooldown_file"
+      printf '%s\n' "$now" >"$cooldown_file"
     fi
   fi
 
-  if (( should_fire )); then
+  if ((should_fire)); then
     run_trigger_command
   fi
 }
@@ -394,7 +424,7 @@ find_waybar_ancestor_pid() {
   local comm=""
   local next_pid=""
 
-  while [[ "$pid" =~ ^[0-9]+$ ]] && (( pid > 1 )) && (( depth < 8 )); do
+  while [[ "$pid" =~ ^[0-9]+$ ]] && ((pid > 1)) && ((depth < 8)); do
     comm="$(awk '{print $2}' "/proc/$pid/stat" 2>/dev/null || true)"
     if [[ "$comm" == "(waybar)" ]]; then
       printf '%s' "$pid"
@@ -402,7 +432,7 @@ find_waybar_ancestor_pid() {
     fi
 
     next_pid="$(awk '{print $4}' "/proc/$pid/stat" 2>/dev/null || true)"
-    if [[ ! "$next_pid" =~ ^[0-9]+$ ]] || (( next_pid <= 1 )); then
+    if [[ ! "$next_pid" =~ ^[0-9]+$ ]] || ((next_pid <= 1)); then
       break
     fi
 
@@ -449,16 +479,16 @@ run_co2_alert() {
   local co2_ppm=0
 
   case "$FAKE_STATE" in
-    critical)
-      printf '{"text":"󰟤 2200 ppm","class":"critical","tooltip":"%s (%s): 2200 ppm"}\n' "$ENTITY_NAME" "$ENTITY_ID"
-      maybe_run_trigger "critical"
-      return
-      ;;
-    warning)
-      printf '{"text":"󰟤 1600 ppm","class":"warning","tooltip":"%s (%s): 1600 ppm"}\n' "$ENTITY_NAME" "$ENTITY_ID"
-      maybe_run_trigger "warning"
-      return
-      ;;
+  critical)
+    printf '{"text":"󰟤 2200 ppm","class":"critical","tooltip":"%s (%s): 2200 ppm"}\n' "$ENTITY_NAME" "$ENTITY_ID"
+    maybe_run_trigger "critical"
+    return
+    ;;
+  warning)
+    printf '{"text":"󰟤 1600 ppm","class":"warning","tooltip":"%s (%s): 1600 ppm"}\n' "$ENTITY_NAME" "$ENTITY_ID"
+    maybe_run_trigger "warning"
+    return
+    ;;
   esac
 
   line="$(read_entity_line "$ENTITY_ID")"
@@ -476,9 +506,9 @@ run_co2_alert() {
   co2_ppm="${state%%.*}"
   maybe_run_trigger "$state"
 
-  if (( co2_ppm > 2000 )); then
+  if ((co2_ppm > 2000)); then
     printf '{"text":"󰟤 %.0f ppm","class":"critical","tooltip":"%s (%s): %.0f ppm"}\n' "$state" "$ENTITY_NAME" "$ENTITY_ID" "$state"
-  elif (( co2_ppm > 1400 )); then
+  elif ((co2_ppm > 1400)); then
     printf '{"text":"󰟤 %.0f ppm","class":"warning","tooltip":"%s (%s): %.0f ppm"}\n' "$state" "$ENTITY_NAME" "$ENTITY_ID" "$state"
   else
     emit_hidden
@@ -493,16 +523,16 @@ run_voc_alert() {
   local value_state=""
 
   case "$FAKE_STATE" in
-    critical)
-      printf '{"text":"󰵃 410","class":"critical","tooltip":"%s (%s): 410\nVOC Quality (%s): Extremely abnormal"}\n' "$ENTITY_NAME" "$VALUE_ENTITY" "$QUALITY_ENTITY"
-      maybe_run_trigger "extremely abnormal"
-      return
-      ;;
-    warning)
-      printf '{"text":"󰵃 240","class":"warning","tooltip":"%s (%s): 240\nVOC Quality (%s): Very abnormal"}\n' "$ENTITY_NAME" "$VALUE_ENTITY" "$QUALITY_ENTITY"
-      maybe_run_trigger "very abnormal"
-      return
-      ;;
+  critical)
+    printf '{"text":"󰵃 410","class":"critical","tooltip":"%s (%s): 410\nVOC Quality (%s): Extremely abnormal"}\n' "$ENTITY_NAME" "$VALUE_ENTITY" "$QUALITY_ENTITY"
+    maybe_run_trigger "extremely abnormal"
+    return
+    ;;
+  warning)
+    printf '{"text":"󰵃 240","class":"warning","tooltip":"%s (%s): 240\nVOC Quality (%s): Very abnormal"}\n' "$ENTITY_NAME" "$VALUE_ENTITY" "$QUALITY_ENTITY"
+    maybe_run_trigger "very abnormal"
+    return
+    ;;
   esac
 
   quality_line="$(read_entity_line "$QUALITY_ENTITY")"
@@ -571,6 +601,48 @@ run_nas_activity() {
 
   printf '{"text":"󰒋 %s","class":"%s","tooltip":"%s (%s): %s\nTurn Off NAS When Inactive (%s): %s"}\n' "$activity_state" "$class_name" "$ENTITY_NAME" "$ENTITY_ID" "$activity_state" "$INACTIVE_SCRIPT_ENTITY" "$inactive_state"
   maybe_run_trigger "$activity_state"
+}
+
+run_dining_temperature() {
+  local gate_line=""
+  local value_line=""
+  local gate_state=""
+  local value_state=""
+
+  gate_line="$(read_entity_line "$GATE_ENTITY")"
+  if [[ -z "$gate_line" ]]; then
+    emit_hidden
+    return
+  fi
+
+  gate_state="$(extract_class_field "$gate_line")"
+  if [[ ! "$gate_state" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    emit_hidden
+    return
+  fi
+
+  # Only show the dining room temperature while the air conditioner target
+  # temperature is below the threshold (i.e. the AC is set to cool the home).
+  if ! awk -v gate="$gate_state" -v limit="$GATE_BELOW" 'BEGIN { exit !(gate < limit) }'; then
+    maybe_run_trigger "$gate_state"
+    emit_hidden
+    return
+  fi
+
+  value_line="$(read_entity_line "$ENTITY_ID")"
+  if [[ -z "$value_line" ]]; then
+    emit_hidden
+    return
+  fi
+
+  value_state="$(extract_class_field "$value_line")"
+  if [[ ! "$value_state" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    emit_hidden
+    return
+  fi
+
+  printf '{"text":"%.1f","class":"temperature","tooltip":"%s (%s): %.1f °C\\nAC Target (%s): %s °C"}\n' "$value_state" "$ENTITY_NAME" "$ENTITY_ID" "$value_state" "$GATE_ENTITY" "$gate_state"
+  maybe_run_trigger "$gate_state"
 }
 
 run_current_next_event() {
@@ -655,27 +727,27 @@ run_doorbell_stream() {
 }
 
 run_doorbell() {
-  if (( FORCE_TRUE )); then
+  if ((FORCE_TRUE)); then
     SIMULATE_STATE="on"
   fi
 
   case "$SIMULATE_STATE" in
-    on)
-      doorbell_emit_on
-      maybe_run_trigger "on"
-      return
-      ;;
-    off)
-      doorbell_emit_off
-      maybe_run_trigger "off"
-      return
-      ;;
-    '')
-      ;;
-    *)
-      printf 'ha-waybar-module: unsupported --simulate value: %s\n' "$SIMULATE_STATE" >&2
-      exit 1
-      ;;
+  on)
+    doorbell_emit_on
+    maybe_run_trigger "on"
+    return
+    ;;
+  off)
+    doorbell_emit_off
+    maybe_run_trigger "off"
+    return
+    ;;
+  '')
+    ;;
+  *)
+    printf 'ha-waybar-module: unsupported --simulate value: %s\n' "$SIMULATE_STATE" >&2
+    exit 1
+    ;;
   esac
 
   run_doorbell_stream
@@ -688,10 +760,10 @@ main() {
   fi
 
   case "$1" in
-    --help|-h)
-      usage
-      exit 0
-      ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
   esac
 
   MODE="$1"
@@ -703,24 +775,27 @@ main() {
   require_commands
 
   case "$MODE" in
-    temperature)
-      run_temperature
-      ;;
-    co2-alert)
-      run_co2_alert
-      ;;
-    voc-alert)
-      run_voc_alert
-      ;;
-    nas-activity)
-      run_nas_activity
-      ;;
-    current-next-event)
-      run_current_next_event
-      ;;
-    doorbell)
-      run_doorbell
-      ;;
+  temperature)
+    run_temperature
+    ;;
+  co2-alert)
+    run_co2_alert
+    ;;
+  voc-alert)
+    run_voc_alert
+    ;;
+  nas-activity)
+    run_nas_activity
+    ;;
+  dining-temperature)
+    run_dining_temperature
+    ;;
+  current-next-event)
+    run_current_next_event
+    ;;
+  doorbell)
+    run_doorbell
+    ;;
   esac
 }
 
