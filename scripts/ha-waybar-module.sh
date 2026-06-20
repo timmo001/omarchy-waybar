@@ -641,7 +641,14 @@ run_dining_temperature() {
     return
   fi
 
-  printf '{"text":"%.1f","class":"temperature","tooltip":"%s (%s): %.1f °C\\nAC Target (%s): %s °C"}\n' "$value_state" "$ENTITY_NAME" "$ENTITY_ID" "$value_state" "$GATE_ENTITY" "$gate_state"
+  local text=""
+  if [[ -n "$ICON" ]]; then
+    text="$(printf '%s %.1f °C' "$ICON" "$value_state")"
+  else
+    text="$(printf '%.1f °C' "$value_state")"
+  fi
+
+  printf '{"text":"%s","class":"temperature","tooltip":"%s (%s): %.1f °C\\nAC Target (%s): %s °C"}\n' "$text" "$ENTITY_NAME" "$ENTITY_ID" "$value_state" "$GATE_ENTITY" "$gate_state"
   maybe_run_trigger "$gate_state"
 }
 

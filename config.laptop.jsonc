@@ -18,9 +18,9 @@
     "clock",
   ],
   "custom/dining-temperature": {
-    "exec": "~/.config/waybar/scripts/ha-waybar-module.sh dining-temperature --entity sensor.meter_plus_433c_temperature --name 'Dining Room Temperature' --gate-entity input_number.living_room_air_conditioner_target_temperature --gate-below 25",
+    "exec": "~/.config/waybar/scripts/ha-waybar-module.sh dining-temperature --icon '󰩰' --entity sensor.meter_plus_433c_temperature --name 'Dining Room Temperature' --gate-entity input_number.living_room_air_conditioner_target_temperature --gate-below 25",
     "return-type": "json",
-    "format": "󰩰 {} °C",
+    "format": "{}",
     "tooltip": true,
     "interval": 15,
     "on-click": "omarchy-launch-webapp 'http://homeassistant.local:8123/lovelace/home?more-info-entity-id=sensor.meter_plus_433c_temperature'",
