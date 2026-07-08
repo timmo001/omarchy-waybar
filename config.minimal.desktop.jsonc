@@ -7,7 +7,6 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
-    "battery",
     "clock"
   ]
 }
