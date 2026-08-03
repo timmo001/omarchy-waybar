@@ -11,3 +11,9 @@ You can find my other dotfiles [here](https://github.com/timmo001/dotfiles).
 - The workflow module reads `dot git-workflows --bar-json --since <one-hour-ago>` so it only reflects watched workflow runs created in the last hour.
 - `custom/git-diff` uses `~/.config/waybar/scripts/git-diff-waybar.sh` and reads `dot git-diff --bar-json`.
 - Left click opens the relevant TUI; right click refreshes the cache or alternate git diff pane.
+
+## Package Updates
+
+- `custom/package-updates` reads package names from `~/.config/dotfiles/.dot-public-packages` and checks them with `yay -Qu`.
+- Repo and AUR package updates are shown as a count with the package names in the tooltip. The module stays hidden when every watched package is current.
+- The module sits alongside Omarchy's built-in update indicator. Its cache refreshes every six hours, on signal 12, or on right click. Left click opens the full Omarchy updater.
