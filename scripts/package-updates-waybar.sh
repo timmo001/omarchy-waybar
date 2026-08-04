@@ -6,11 +6,16 @@ PACKAGE_FILE="${WAYBAR_PACKAGE_UPDATES_FILE:-$HOME/.config/dotfiles/.dot-public-
 CACHE_DIR="${WAYBAR_PACKAGE_UPDATES_CACHE_DIR:-${XDG_CACHE_HOME:-$HOME/.cache}/waybar}"
 CACHE_FILE="$CACHE_DIR/package-updates-waybar.json"
 LOCK_DIR="$CACHE_DIR/package-updates-waybar.lock"
+BACKOFF_FILE="$CACHE_DIR/package-updates-waybar.backoff"
 YAY_BIN="${WAYBAR_PACKAGE_UPDATES_YAY_BIN:-yay}"
+PACMAN_BIN="${WAYBAR_PACKAGE_UPDATES_PACMAN_BIN:-pacman}"
 SETSID_BIN="${WAYBAR_PACKAGE_UPDATES_SETSID_BIN:-setsid}"
 PKILL_BIN="${WAYBAR_PACKAGE_UPDATES_PKILL_BIN:-pkill}"
 REFRESH_SIGNAL="${WAYBAR_PACKAGE_UPDATES_SIGNAL:-12}"
 REFRESH_TIMEOUT="${WAYBAR_PACKAGE_UPDATES_TIMEOUT:-120}"
+CACHE_MAX_AGE="${WAYBAR_PACKAGE_UPDATES_CACHE_MAX_AGE:-900}"
+BACKOFF_BASE="${WAYBAR_PACKAGE_UPDATES_BACKOFF_BASE:-1800}"
+BACKOFF_MAX="${WAYBAR_PACKAGE_UPDATES_BACKOFF_MAX:-21600}"
 
 loading_json='{"text":"󰏗 ..","tooltip":"Watched package updates: loading","class":"package-updates-unknown"}'
 hidden_json='{"text":"","tooltip":"Watched packages are up to date","class":"hidden"}'
@@ -23,8 +28,9 @@ signal_waybar_refresh() {
 }
 
 refresh_cache() {
-  local output_file error_file status output rendered_json tmp_file
-  local -a packages=()
+  local repo_output_file aur_output_file aur_error_file aur_status aur_available output rendered_json tmp_file
+  local now backoff_failures=0 backoff_until=0 backoff_seconds
+  local -a packages=() repo_packages=() aur_packages=()
 
   if [[ ! -r "$PACKAGE_FILE" ]]; then
     rendered_json="$error_json"
@@ -38,30 +44,69 @@ refresh_cache() {
     if ((${#packages[@]} == 0)); then
       rendered_json="$hidden_json"
     else
-      output_file="$(mktemp)"
-      error_file="$(mktemp)"
-      set +e
-      timeout "$REFRESH_TIMEOUT" "$YAY_BIN" -Quq -- "${packages[@]}" >"$output_file" 2>"$error_file"
-      status=$?
-      set -e
+      for package in "${packages[@]}"; do
+        if "$PACMAN_BIN" -Qnq -- "$package" >/dev/null 2>&1; then
+          repo_packages+=("$package")
+        elif "$PACMAN_BIN" -Qmq -- "$package" >/dev/null 2>&1; then
+          aur_packages+=("$package")
+        fi
+      done
 
-      output="$(sort -u "$output_file" | sed '/^[[:space:]]*$/d')"
+      repo_output_file="$(mktemp)"
+      aur_output_file="$(mktemp)"
+      aur_error_file="$(mktemp)"
+      if ((${#repo_packages[@]} > 0)); then
+        "$PACMAN_BIN" -Quq -- "${repo_packages[@]}" >"$repo_output_file" 2>/dev/null || true
+      fi
+
+      aur_status=0
+      if ((${#aur_packages[@]} > 0)); then
+        now="$(date +%s)"
+        if [[ -r "$BACKOFF_FILE" ]]; then
+          read -r backoff_failures backoff_until <"$BACKOFF_FILE" || true
+        fi
+        if ((now < backoff_until)); then
+          aur_status=75
+          printf 'AUR request backed off until %s\n' "$backoff_until" >"$aur_error_file"
+        else
+          set +e
+          timeout "$REFRESH_TIMEOUT" "$YAY_BIN" -Quaq -- "${aur_packages[@]}" >"$aur_output_file" 2>"$aur_error_file"
+          aur_status=$?
+          set -e
+
+          if { ((aur_status == 0 || aur_status == 1)) && [[ ! -s "$aur_error_file" ]]; }; then
+            rm -f "$BACKOFF_FILE"
+          elif grep -Eiq '(status|HTTP([^0-9]|/[0-9.])*)[^0-9]*(4|5)[0-9]{2}([^0-9]|$)' "$aur_error_file"; then
+            ((backoff_failures < 5)) && ((backoff_failures += 1))
+            backoff_seconds=$((BACKOFF_BASE * (1 << (backoff_failures - 1))))
+            ((backoff_seconds > BACKOFF_MAX)) && backoff_seconds="$BACKOFF_MAX"
+            printf '%s %s\n' "$backoff_failures" "$((now + backoff_seconds))" >"$BACKOFF_FILE"
+          fi
+        fi
+      fi
+
+      output="$(sort -u "$repo_output_file" "$aur_output_file" | sed '/^[[:space:]]*$/d')"
       if [[ -n "$output" ]]; then
-        rendered_json="$(jq -cn --arg updates "$output" '
+        if { ((aur_status == 0 || aur_status == 1)) && [[ ! -s "$aur_error_file" ]]; }; then
+          aur_available=true
+        else
+          aur_available=false
+        fi
+        rendered_json="$(jq -cn --arg updates "$output" --argjson aur_available "$aur_available" '
           ($updates | split("\n")) as $packages
           | {
               text: ("󰏗 " + ($packages | length | tostring)),
-              tooltip: ("Watched package updates:\n" + ($packages | join("\n"))),
+              tooltip: ("Watched package updates:\n" + ($packages | join("\n")) + (if $aur_available then "" else "\n\nAUR updates unavailable" end)),
               class: "package-updates"
             }
         ')"
-      elif { ((status == 0 || status == 1)) && [[ ! -s "$error_file" ]]; }; then
+      elif { ((aur_status == 0 || aur_status == 1)) && [[ ! -s "$aur_error_file" ]]; }; then
         rendered_json="$hidden_json"
       else
         rendered_json="$error_json"
       fi
 
-      rm -f "$output_file" "$error_file"
+      rm -f "$repo_output_file" "$aur_output_file" "$aur_error_file"
     fi
   fi
 
@@ -80,7 +125,8 @@ refresh)
   refresh_cache
   ;;
 status)
-  if mkdir "$LOCK_DIR" 2>/dev/null; then
+  cache_age=$(($(date +%s) - $(stat -c %Y "$CACHE_FILE" 2>/dev/null || printf '0')))
+  if ((cache_age >= CACHE_MAX_AGE)) && mkdir "$LOCK_DIR" 2>/dev/null; then
     "$SETSID_BIN" env WAYBAR_PACKAGE_UPDATES_LOCKED=1 "$0" refresh >/dev/null 2>&1 &
   fi
 

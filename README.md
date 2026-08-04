@@ -14,6 +14,6 @@ You can find my other dotfiles [here](https://github.com/timmo001/dotfiles).
 
 ## Package Updates
 
-- `custom/package-updates` reads package names from `~/.config/dotfiles/.dot-public-packages` and checks them with `yay -Qu`.
-- Repo and AUR package updates are shown as a count with the package names in the tooltip. The module stays hidden when every watched package is current.
-- The module sits alongside Omarchy's built-in update indicator. Its cache refreshes every six hours, on signal 12, or on right click. Left click opens the full Omarchy updater.
+- `custom/package-updates` reads package names from `~/.config/dotfiles/.dot-public-packages` and checks repository packages with `pacman -Qu` and foreign packages with `yay -Qua`.
+- Repo and AUR package updates are shown as a count with the package names in the tooltip. Repository updates remain visible when the AUR check fails, and the module stays hidden when every watched package is current.
+- The module sits alongside Omarchy's built-in update indicator. Its cache refreshes every 15 minutes, on signal 12, or on right click. AUR HTTP 4xx/5xx responses trigger an AUR-only exponential retry delay from 30 minutes up to six hours. Left click opens the full Omarchy updater.

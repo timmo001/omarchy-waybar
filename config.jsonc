@@ -60,7 +60,7 @@
     "exec-on-event": false,
     "tooltip": true,
     "signal": 12,
-    "interval": 21600,
+    "interval": 900,
   },
   "custom/update": {
     "format": "",
