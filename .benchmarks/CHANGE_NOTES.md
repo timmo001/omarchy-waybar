@@ -8,7 +8,7 @@
 
 ## High-priority change targets
 
-- `/home/aidan/.config/waybar/scripts/ha-waybar-module.sh`
+- `ha-module-bar`
 - `/home/aidan/.config/dotfiles/scripts/.local/bin/ha-watch-singleton`
 - `/home/aidan/.config/dotfiles/scripts/.local/bin/singleton-stream`
 

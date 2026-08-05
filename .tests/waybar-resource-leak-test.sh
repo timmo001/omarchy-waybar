@@ -55,7 +55,7 @@ declare -a CATEGORIES=(
   "go-automate bridge serve"
   "go-automate bridge watch"
   "singleton-stream"
-  "ha-waybar-module"
+  "ha-module-bar"
 )
 
 declare -A SAMPLE_COUNT=()
@@ -197,16 +197,16 @@ count_singleton() {
 }
 
 count_waybar_modules() {
-  pgrep -fc 'ha-waybar-module\.sh' || true
+  pgrep -fc 'ha-module-bar' || true
 }
 
 list_relevant_processes() {
-  pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge serve|go-automate ha bridge watch entity --bar-json|go-automate ha watch entity --bar-json)' || true
+  pgrep -af '(^/usr/bin/waybar|ha-module-bar|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge serve|go-automate ha bridge watch entity --bar-json|go-automate ha watch entity --bar-json)' || true
 }
 
 cleanup_waybar_processes() {
   pkill -x waybar >/dev/null 2>&1 || true
-  pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
+  pkill -f 'ha-module-bar' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
   pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
@@ -226,7 +226,7 @@ print_process_snapshot() {
 
   printf '\n%b== %s ==%b\n' "${C_BOLD}${C_BLUE}" "$label" "$C_RESET"
   printf 'waybar: %s\n' "$(count_waybar)"
-  printf 'ha-waybar-module: %s\n' "$(count_waybar_modules)"
+  printf 'ha-module-bar: %s\n' "$(count_waybar_modules)"
   printf 'singleton-stream: %s\n' "$(count_singleton)"
   printf 'bridge-watchers: %s\n' "$(count_watchers)"
   printf 'details:\n'
@@ -244,8 +244,8 @@ category_for_cmd() {
     printf 'singleton-stream'
   elif [[ "$cmd" == *'go-automate ha bridge watch entity --bar-json'* ]]; then
     printf 'go-automate bridge watch'
-  elif [[ "$cmd" == *'ha-waybar-module.sh'* ]]; then
-    printf 'ha-waybar-module'
+  elif [[ "$cmd" == *'ha-module-bar'* ]]; then
+    printf 'ha-module-bar'
   else
     printf ''
   fi

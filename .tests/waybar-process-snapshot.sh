@@ -62,22 +62,22 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --expect-stopped)
-      EXPECT_STOPPED=1
-      shift
-      ;;
-    --output)
-      OUTPUT_FILE="$2"
-      shift 2
-      ;;
-    --help|-h)
-      usage
-      exit 0
-      ;;
-    *)
-      printf 'waybar-process-snapshot.sh: unknown argument: %s\n' "$1" >&2
-      exit 1
-      ;;
+  --expect-stopped)
+    EXPECT_STOPPED=1
+    shift
+    ;;
+  --output)
+    OUTPUT_FILE="$2"
+    shift 2
+    ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
+  *)
+    printf 'waybar-process-snapshot.sh: unknown argument: %s\n' "$1" >&2
+    exit 1
+    ;;
   esac
 done
 
@@ -98,8 +98,8 @@ classify_process() {
 
   if [[ "$cmd" =~ ^/usr/bin/waybar($|[[:space:]]) ]]; then
     printf 'waybar | bar'
-  elif [[ "$cmd" == *'ha-waybar-module.sh'* ]]; then
-    printf 'ha-waybar-module | module-script'
+  elif [[ "$cmd" == *'ha-module-bar'* ]]; then
+    printf 'ha-module-bar | module-script'
   elif [[ "$cmd" == *'singleton-stream --key'* ]]; then
     printf 'singleton-stream | stream-worker'
   elif [[ "$cmd" == *'ha-watch-singleton --module'* ]]; then
@@ -126,36 +126,36 @@ collect_counts() {
 
   for ((sample = 1; sample <= SAMPLE_ATTEMPTS; sample += 1)); do
     current="$(count_matching '^/usr/bin/waybar')"
-    if (( current > waybar_count )); then
+    if ((current > waybar_count)); then
       waybar_count="$current"
     fi
 
-    current="$(count_matching 'ha-waybar-module\.sh')"
-    if (( current > module_count )); then
+    current="$(count_matching 'ha-module-bar')"
+    if ((current > module_count)); then
       module_count="$current"
     fi
 
     current="$(count_matching 'singleton-stream --key')"
-    if (( current > singleton_count )); then
+    if ((current > singleton_count)); then
       singleton_count="$current"
     fi
 
     current="$(count_matching 'ha-watch-singleton --module')"
-    if (( current > singleton_wrapper_count )); then
+    if ((current > singleton_wrapper_count)); then
       singleton_wrapper_count="$current"
     fi
 
     current="$(count_matching '^go-automate ha bridge watch entity --bar-json')"
-    if (( current > bridge_watcher_count )); then
+    if ((current > bridge_watcher_count)); then
       bridge_watcher_count="$current"
     fi
 
     current="$(count_matching '^go-automate ha watch entity --bar-json')"
-    if (( current > direct_watcher_count )); then
+    if ((current > direct_watcher_count)); then
       direct_watcher_count="$current"
     fi
 
-    if (( sample < SAMPLE_ATTEMPTS )); then
+    if ((sample < SAMPLE_ATTEMPTS)); then
       sleep "$SAMPLE_DELAY"
     fi
   done
@@ -168,7 +168,7 @@ list_relevant_processes() {
   local cmd=""
   local kind=""
 
-  lines="$(pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|^go-automate ha bridge watch entity --bar-json|^go-automate ha watch entity --bar-json)' || true)"
+  lines="$(pgrep -af '(^/usr/bin/waybar|ha-module-bar|singleton-stream --key|ha-watch-singleton --module|^go-automate ha bridge watch entity --bar-json|^go-automate ha watch entity --bar-json)' || true)"
 
   if [[ -z "$lines" ]]; then
     printf '(none)\n'
@@ -184,7 +184,7 @@ list_relevant_processes() {
     fi
     kind="$(classify_process "$cmd")"
     printf '[%-34s] %s %s\n' "$kind" "$pid" "$cmd"
-  done <<< "$lines"
+  done <<<"$lines"
 }
 
 main() {
@@ -201,22 +201,20 @@ main() {
 
   collect_counts
 
-  total_active=$((
-    waybar_count +
-    module_count +
-    singleton_count +
-    singleton_wrapper_count +
-    bridge_watcher_count +
-    direct_watcher_count
-  ))
+  total_active=$((\
+    waybar_count + \
+    module_count + \
+    singleton_count + \
+    singleton_wrapper_count + \
+    bridge_watcher_count + \
+    direct_watcher_count))
 
-  helper_active=$((
-    module_count +
-    singleton_count +
-    singleton_wrapper_count +
-    bridge_watcher_count +
-    direct_watcher_count
-  ))
+  helper_active=$((\
+    module_count + \
+    singleton_count + \
+    singleton_wrapper_count + \
+    bridge_watcher_count + \
+    direct_watcher_count))
 
   style_line "${C_BOLD}${C_CYAN}" 'Waybar process snapshot'
   style_section 'Configuration'
@@ -225,7 +223,7 @@ main() {
 
   style_section 'Summary'
   printf -- '- Waybar bar process [waybar]: %s\n' "$waybar_count"
-  printf -- '- Module helper scripts [ha-waybar-module]: %s\n' "$module_count"
+  printf -- '- Module helper scripts [ha-module-bar]: %s\n' "$module_count"
   printf -- '- Shared stream workers [singleton-stream]: %s\n' "$singleton_count"
   printf -- '- HA bridge watcher children [bridge-watchers]: %s\n' "$bridge_watcher_count"
   printf -- '- Direct watcher children [direct-watchers]: %s\n' "$direct_watcher_count"
@@ -234,11 +232,11 @@ main() {
   style_section 'Process details'
   list_relevant_processes
 
-  if (( EXPECT_STOPPED )); then
+  if ((EXPECT_STOPPED)); then
     style_section 'Result'
-    if (( total_active == 0 )); then
+    if ((total_active == 0)); then
       style_line "${C_BOLD}${C_GREEN}" 'Result: PASS (no Waybar-related processes running)'
-    elif (( waybar_count == 0 && helper_active > 0 )); then
+    elif ((waybar_count == 0 && helper_active > 0)); then
       printf '%bResult: FAIL%b (Waybar is stopped but %s helper process(es) are still running)\n' "$C_RED" "$C_RESET" "$helper_active"
       printf 'Tip: kill leftovers with `pkill -f "[s]ingleton-stream --key"` and `pkill -f "[g]o-automate ha bridge watch entity --bar-json"`.\n'
       style_section 'Output'
@@ -251,7 +249,7 @@ main() {
       printf 'Output file: %s\n' "$OUTPUT_FILE"
       exit 1
     fi
-  elif (( waybar_count == 0 && helper_active > 0 )); then
+  elif ((waybar_count == 0 && helper_active > 0)); then
     style_section 'Result'
     printf '%bResult: WARNING%b (Waybar is not running but %s helper process(es) are still running)\n' "$C_YELLOW" "$C_RESET" "$helper_active"
     printf 'Tip: kill leftovers with `pkill -f "[s]ingleton-stream --key"` and `pkill -f "[g]o-automate ha bridge watch entity --bar-json"`.\n'

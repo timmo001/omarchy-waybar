@@ -2,8 +2,7 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MODULE="$SCRIPT_DIR/../scripts/package-updates-waybar.sh"
+MODULE="${PACKAGE_UPDATES_BAR_BIN:-package-updates-bar}"
 TEST_DIR="$(mktemp -d)"
 PACKAGE_FILE="$TEST_DIR/packages"
 CACHE_DIR="$TEST_DIR/cache"
@@ -138,4 +137,4 @@ cached_json="$($MODULE status)"
 jq -e '.text == "cached" and .class == "package-updates"' <<<"$cached_json" >/dev/null
 [[ ! -d "$CACHE_DIR/package-updates-waybar.lock" ]]
 
-printf 'package-updates-waybar: all tests passed\n'
+printf 'package-updates-bar: all tests passed\n'

@@ -55,26 +55,26 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --cycles)
-      CYCLES="$2"
-      shift 2
-      ;;
-    --output)
-      OUTPUT_FILE="$2"
-      shift 2
-      ;;
-    --help|-h)
-      usage
-      exit 0
-      ;;
-    *)
-      printf 'waybar-leak-test.sh: unknown argument: %s\n' "$1" >&2
-      exit 1
-      ;;
+  --cycles)
+    CYCLES="$2"
+    shift 2
+    ;;
+  --output)
+    OUTPUT_FILE="$2"
+    shift 2
+    ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
+  *)
+    printf 'waybar-leak-test.sh: unknown argument: %s\n' "$1" >&2
+    exit 1
+    ;;
   esac
 done
 
-if [[ ! "$CYCLES" =~ ^[0-9]+$ ]] || (( CYCLES < 1 )); then
+if [[ ! "$CYCLES" =~ ^[0-9]+$ ]] || ((CYCLES < 1)); then
   printf 'waybar-leak-test.sh: --cycles must be >= 1\n' >&2
   exit 1
 fi
@@ -99,16 +99,16 @@ count_singleton() {
 }
 
 count_waybar_modules() {
-  pgrep -fc 'ha-waybar-module\.sh' || true
+  pgrep -fc 'ha-module-bar' || true
 }
 
 list_relevant_processes() {
-  pgrep -af '(^/usr/bin/waybar|ha-waybar-module\.sh|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge watch entity --bar-json|go-automate ha watch entity --bar-json)' || true
+  pgrep -af '(^/usr/bin/waybar|ha-module-bar|singleton-stream --key|ha-watch-singleton --module|go-automate ha bridge watch entity --bar-json|go-automate ha watch entity --bar-json)' || true
 }
 
 cleanup_waybar_processes() {
   pkill -x waybar >/dev/null 2>&1 || true
-  pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
+  pkill -f 'ha-module-bar' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
   pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
@@ -130,7 +130,7 @@ print_snapshot() {
 
   style_section "$label"
   printf 'waybar: %s\n' "$(count_waybar)"
-  printf 'ha-waybar-module: %s\n' "$(count_waybar_modules)"
+  printf 'ha-module-bar: %s\n' "$(count_waybar_modules)"
   printf 'singleton-stream: %s\n' "$(count_singleton)"
   printf 'bridge-watchers: %s\n' "$(count_watchers)"
   printf 'details:\n'

@@ -60,35 +60,35 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --samples)
-      SAMPLES="$2"
-      shift 2
-      ;;
-    --interval)
-      INTERVAL="$2"
-      shift 2
-      ;;
-    --output)
-      OUTPUT_FILE="$2"
-      shift 2
-      ;;
-    --help|-h)
-      usage
-      exit 0
-      ;;
-    *)
-      printf 'ha-watch-singleton-isolation-test.sh: unknown argument: %s\n' "$1" >&2
-      exit 1
-      ;;
+  --samples)
+    SAMPLES="$2"
+    shift 2
+    ;;
+  --interval)
+    INTERVAL="$2"
+    shift 2
+    ;;
+  --output)
+    OUTPUT_FILE="$2"
+    shift 2
+    ;;
+  --help | -h)
+    usage
+    exit 0
+    ;;
+  *)
+    printf 'ha-watch-singleton-isolation-test.sh: unknown argument: %s\n' "$1" >&2
+    exit 1
+    ;;
   esac
 done
 
-if [[ ! "$SAMPLES" =~ ^[0-9]+$ ]] || (( SAMPLES < 1 )); then
+if [[ ! "$SAMPLES" =~ ^[0-9]+$ ]] || ((SAMPLES < 1)); then
   printf 'ha-watch-singleton-isolation-test.sh: --samples must be >= 1\n' >&2
   exit 1
 fi
 
-if [[ ! "$INTERVAL" =~ ^[0-9]+$ ]] || (( INTERVAL < 1 )); then
+if [[ ! "$INTERVAL" =~ ^[0-9]+$ ]] || ((INTERVAL < 1)); then
   printf 'ha-watch-singleton-isolation-test.sh: --interval must be >= 1\n' >&2
   exit 1
 fi
@@ -156,7 +156,7 @@ list_child_watchers_for_singleton() {
 
 cleanup_waybar_processes() {
   pkill -x waybar >/dev/null 2>&1 || true
-  pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
+  pkill -f 'ha-module-bar' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
   pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
@@ -179,7 +179,7 @@ stop_case_process() {
 
   while kill -0 "$pid" >/dev/null 2>&1; do
     grace=$((grace + 1))
-    if (( grace >= 5 )); then
+    if ((grace >= 5)); then
       kill -KILL -- "-$pid" >/dev/null 2>&1 || kill -KILL "$pid" >/dev/null 2>&1 || true
       break
     fi
@@ -244,24 +244,24 @@ run_case() {
     singleton_count="$(count_matching "$singleton_pattern")"
     watcher_count="$(count_child_watchers_for_singleton "$singleton_pattern")"
 
-    if (( first_singleton < 0 )); then
+    if ((first_singleton < 0)); then
       first_singleton="$singleton_count"
     fi
-    if (( first_watcher < 0 )); then
+    if ((first_watcher < 0)); then
       first_watcher="$watcher_count"
     fi
 
-    if (( singleton_count < min_singleton )); then
+    if ((singleton_count < min_singleton)); then
       min_singleton="$singleton_count"
     fi
-    if (( singleton_count > max_singleton )); then
+    if ((singleton_count > max_singleton)); then
       max_singleton="$singleton_count"
     fi
 
-    if (( watcher_count < min_watcher )); then
+    if ((watcher_count < min_watcher)); then
       min_watcher="$watcher_count"
     fi
-    if (( watcher_count > max_watcher )); then
+    if ((watcher_count > max_watcher)); then
       max_watcher="$watcher_count"
     fi
 
@@ -274,7 +274,7 @@ run_case() {
   for ((sample = 1; sample <= SHUTDOWN_WAIT; sample += 1)); do
     end_singleton="$(count_matching "$singleton_pattern")"
     end_watcher="$(count_child_watchers_for_singleton "$singleton_pattern")"
-    if (( end_singleton == 0 && end_watcher == 0 )); then
+    if ((end_singleton == 0 && end_watcher == 0)); then
       break
     fi
     sleep 1
@@ -282,13 +282,13 @@ run_case() {
 
   print_case_snapshot 'After stop' "$singleton_pattern"
 
-  if (( first_singleton == 0 )); then
+  if ((first_singleton == 0)); then
     status="FAIL"
   fi
-  if (( max_singleton > 1 || max_watcher > 1 )); then
+  if ((max_singleton > 1 || max_watcher > 1)); then
     status="FAIL"
   fi
-  if (( end_singleton != 0 || end_watcher != 0 )); then
+  if ((end_singleton != 0 || end_watcher != 0)); then
     status="FAIL"
   fi
 
@@ -348,7 +348,7 @@ run_case() {
   sleep 2
 
   style_section 'Result'
-  if (( FAILURES > 0 )); then
+  if ((FAILURES > 0)); then
     style_line "${C_BOLD}${C_RED}" "Result: FAIL ($FAILURES failing case(s))"
     exit 1
   fi

@@ -53,30 +53,30 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    -s|--sample)
-      sample_seconds="$2"
-      shift 2
-      ;;
-    -g|--growth)
-      growth_seconds="$2"
-      shift 2
-      ;;
-    -o|--output)
-      output_file="$2"
-      shift 2
-      ;;
-    --reset)
-      reset_environment=1
-      shift
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      printf 'Unknown argument: %s\n' "$1" >&2
-      exit 1
-      ;;
+  -s | --sample)
+    sample_seconds="$2"
+    shift 2
+    ;;
+  -g | --growth)
+    growth_seconds="$2"
+    shift 2
+    ;;
+  -o | --output)
+    output_file="$2"
+    shift 2
+    ;;
+  --reset)
+    reset_environment=1
+    shift
+    ;;
+  -h | --help)
+    usage
+    exit 0
+    ;;
+  *)
+    printf 'Unknown argument: %s\n' "$1" >&2
+    exit 1
+    ;;
   esac
 done
 
@@ -90,7 +90,7 @@ fi
 
 cleanup_waybar_processes() {
   pkill -x waybar >/dev/null 2>&1 || true
-  pkill -f '/home/aidan/.config/waybar/scripts/ha-waybar-module.sh' >/dev/null 2>&1 || true
+  pkill -f 'ha-module-bar' >/dev/null 2>&1 || true
   pkill -f 'ha-watch-singleton --module' >/dev/null 2>&1 || true
   pkill -f 'singleton-stream --key' >/dev/null 2>&1 || true
   pkill -f '[g]o-automate ha bridge watch entity --bar-json' >/dev/null 2>&1 || true
@@ -125,12 +125,12 @@ category_for_cmd() {
     printf 'twitch-notifications'
   elif [[ "$cmd" == *"omarchy-voxtype-status"* ]]; then
     printf 'omarchy-voxtype-status'
-  elif [[ "$cmd" == *"git-diff-waybar.sh"* ]]; then
-    printf 'git-diff-waybar'
-  elif [[ "$cmd" == *"git-workflows-waybar.sh"* ]]; then
-    printf 'git-workflows-waybar'
-  elif [[ "$cmd" == *"ha-waybar-module.sh"* ]]; then
-    printf 'ha-waybar-module'
+  elif [[ "$cmd" == *"git-diff-bar"* ]]; then
+    printf 'git-diff-bar'
+  elif [[ "$cmd" == *"git-workflows-bar"* ]]; then
+    printf 'git-workflows-bar'
+  elif [[ "$cmd" == *"ha-module-bar"* ]]; then
+    printf 'ha-module-bar'
   else
     printf ''
   fi
@@ -226,25 +226,25 @@ run_snapshot() {
 
     cpu_tenths="$(awk -v v="$pcpu" 'BEGIN { printf "%.0f", v * 10.0 }')"
 
-    category_count[$category]=$(( ${category_count[$category]:-0} + 1 ))
-    category_cpu_tenths[$category]=$(( ${category_cpu_tenths[$category]:-0} + cpu_tenths ))
-    category_rss_kb[$category]=$(( ${category_rss_kb[$category]:-0} + rss ))
+    category_count[$category]=$((${category_count[$category]:-0} + 1))
+    category_cpu_tenths[$category]=$((${category_cpu_tenths[$category]:-0} + cpu_tenths))
+    category_rss_kb[$category]=$((${category_rss_kb[$category]:-0} + rss))
 
     if [[ -n "${pid_tcp_conns[$pid]:-}" ]]; then
-      category_tcp_conns[$category]=$(( ${category_tcp_conns[$category]:-0} + ${pid_tcp_conns[$pid]} ))
-      category_tcp_rx[$category]=$(( ${category_tcp_rx[$category]:-0} + ${pid_tcp_rx[$pid]} ))
-      category_tcp_tx[$category]=$(( ${category_tcp_tx[$category]:-0} + ${pid_tcp_tx[$pid]} ))
+      category_tcp_conns[$category]=$((${category_tcp_conns[$category]:-0} + ${pid_tcp_conns[$pid]}))
+      category_tcp_rx[$category]=$((${category_tcp_rx[$category]:-0} + ${pid_tcp_rx[$pid]}))
+      category_tcp_tx[$category]=$((${category_tcp_tx[$category]:-0} + ${pid_tcp_tx[$pid]}))
     fi
 
     if [[ "$cmd" == *"go-automate ha bridge watch entity --bar-json"* ]]; then
       entity="${cmd##* }"
       if [[ "$entity" =~ ^[a-z_]+\.[a-z0-9_]+$ ]]; then
-        watch_entities_count[$entity]=$(( ${watch_entities_count[$entity]:-0} + 1 ))
-        watch_entities_rss_kb[$entity]=$(( ${watch_entities_rss_kb[$entity]:-0} + rss ))
+        watch_entities_count[$entity]=$((${watch_entities_count[$entity]:-0} + 1))
+        watch_entities_rss_kb[$entity]=$((${watch_entities_rss_kb[$entity]:-0} + rss))
       fi
-      watch_ppid_count[$ppid]=$(( ${watch_ppid_count[$ppid]:-0} + 1 ))
+      watch_ppid_count[$ppid]=$((${watch_ppid_count[$ppid]:-0} + 1))
     fi
-  done <<< "$ps_lines"
+  done <<<"$ps_lines"
 
   style_line "${C_BOLD}${C_CYAN}" 'Waybar daemon usage benchmark'
   style_section 'Execution'
@@ -275,7 +275,7 @@ run_snapshot() {
     printf '%s\t%s\n' "$parent_pid" "${watch_ppid_count[$parent_pid]}"
   done | sort -t$'\t' -k2,2nr | awk 'NR<=5'
 
-  if (( growth_seconds > 0 )); then
+  if ((growth_seconds > 0)); then
     local start end delta per_min
     start="$(count_watchers)"
     sleep "$growth_seconds"
@@ -294,7 +294,7 @@ run_snapshot() {
   printf 'Reset mode: %s\n' "$reset_environment"
 
   style_section 'Preparation'
-  if (( reset_environment )); then
+  if ((reset_environment)); then
     style_step 'Stopping Waybar and related watcher/module processes'
     cleanup_waybar_processes
     style_step 'Restarting Waybar before measurement'
@@ -306,7 +306,7 @@ run_snapshot() {
   run_snapshot
 } | tee "$output_file"
 
-if (( reset_environment )); then
+if ((reset_environment)); then
   style_section 'Cleanup'
   style_step 'Restarting Waybar after benchmark'
   restart_waybar
@@ -315,7 +315,7 @@ style_section 'Result'
 style_line "$C_GREEN" 'Result: completed daemon usage benchmark' | tee -a "$output_file"
 style_section 'Output'
 printf 'Output file: %s\n' "$output_file" | tee -a "$output_file"
-if (( reset_environment )); then
+if ((reset_environment)); then
   style_line "$C_GREEN" 'Post-run: Waybar restart requested' | tee -a "$output_file"
 else
   style_line "$C_GREEN" 'Post-run: no restart (live-state mode)' | tee -a "$output_file"
